@@ -195,9 +195,9 @@ namespace PhotoTransfer
 
         private int TreeIcons(TreeView oldTreeView, DriveInfo driveInfo, int driveNumber, int iconNumber) // Add drive in tree and add icon
         {
-            LeftTreeView.Nodes.Add(driveInfo.Name); // Add drive in tree
-            LeftTreeView.Nodes[driveNumber].ImageIndex = iconNumber; // Set selected icon for selected drive as default
-            LeftTreeView.Nodes[driveNumber].SelectedImageIndex = iconNumber; // Set icon for drive if drive was mouse selected
+            oldTreeView.Nodes.Add(driveInfo.Name); // Add drive in tree
+            oldTreeView.Nodes[driveNumber].ImageIndex = iconNumber; // Set selected icon for selected drive as default
+            oldTreeView.Nodes[driveNumber].SelectedImageIndex = iconNumber; // Set icon for drive if drive was mouse selected
             return ++driveNumber; // Return new number for next drive
         }
 
