@@ -37,7 +37,7 @@ namespace PhotoTransfer
             this.btnClose = new System.Windows.Forms.Button();
             this.leftPanel = new System.Windows.Forms.Panel();
             this.LeftTreeView = new System.Windows.Forms.TreeView();
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.iconsList = new System.Windows.Forms.ImageList(this.components);
             this.button1 = new System.Windows.Forms.Button();
             this.leftSplitter = new System.Windows.Forms.Splitter();
             this.rightPanel = new System.Windows.Forms.Panel();
@@ -146,7 +146,7 @@ namespace PhotoTransfer
             this.LeftTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.LeftTreeView.ForeColor = System.Drawing.SystemColors.Control;
             this.LeftTreeView.ImageIndex = 3;
-            this.LeftTreeView.ImageList = this.imageList1;
+            this.LeftTreeView.ImageList = this.iconsList;
             this.LeftTreeView.Indent = 30;
             this.LeftTreeView.ItemHeight = 30;
             this.LeftTreeView.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
@@ -157,19 +157,19 @@ namespace PhotoTransfer
             this.LeftTreeView.ShowPlusMinus = false;
             this.LeftTreeView.ShowRootLines = false;
             this.LeftTreeView.Size = new System.Drawing.Size(200, 696);
-            this.LeftTreeView.StateImageList = this.imageList1;
+            this.LeftTreeView.StateImageList = this.iconsList;
             this.LeftTreeView.TabIndex = 0;
             this.LeftTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.LeftTreeView_AfterSelect);
             // 
-            // imageList1
+            // iconsList
             // 
-            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList1.Images.SetKeyName(0, "icons8-cd-48.png");
-            this.imageList1.Images.SetKeyName(1, "icons8-c-drive-48.png");
-            this.imageList1.Images.SetKeyName(2, "icons8-hdd-32.png");
-            this.imageList1.Images.SetKeyName(3, "Close Folder.png");
-            this.imageList1.Images.SetKeyName(4, "OpenFolder.png");
+            this.iconsList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("iconsList.ImageStream")));
+            this.iconsList.TransparentColor = System.Drawing.Color.Transparent;
+            this.iconsList.Images.SetKeyName(0, "icons8-cd-48.png");
+            this.iconsList.Images.SetKeyName(1, "icons8-c-drive-48.png");
+            this.iconsList.Images.SetKeyName(2, "icons8-hdd-32.png");
+            this.iconsList.Images.SetKeyName(3, "Close Folder.png");
+            this.iconsList.Images.SetKeyName(4, "OpenFolder.png");
             // 
             // button1
             // 
@@ -279,7 +279,7 @@ namespace PhotoTransfer
         private System.Windows.Forms.Splitter bottomSplitter;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TreeView LeftTreeView;
-        private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.ImageList iconsList;
     }
 }
 

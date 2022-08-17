@@ -14,11 +14,11 @@ namespace PhotoTransfer
 {
     public partial class frmMain : Form
     {
-        private DateTime lastClick = DateTime.Now;
-        private int borderSide = 12;
-        private int paddingSize = 4;
+        private DateTime lastClick = DateTime.Now; // Variable for borderCaptionPanel_MouseDown()
+        private int borderSide = 12; // Variable for WndProc()
+        private int paddingSize = 4; // Variable for WindowStateFunction() and WndProc()
 
-        bool existNode = false;
+        bool existNode = false; // Variable for ShowDirectorys() and ExistNode()
 
         public frmMain()
         {
@@ -31,30 +31,30 @@ namespace PhotoTransfer
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
         private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
 
-        private void borderCaptionPanel_MouseDown(object sender, MouseEventArgs e)
+        private void borderCaptionPanel_MouseDown(object sender, MouseEventArgs e) // DoubleClick for Border Caption
         {
-            TimeSpan length = DateTime.Now - lastClick;
-            TimeSpan interval = new TimeSpan(0, 0, 0, 0, 250);
+            TimeSpan length = DateTime.Now - lastClick; // Get new time interval
+            TimeSpan interval = new TimeSpan(0, 0, 0, 0, 250); // Time for comparison
 
-            if (length < interval)
+            if (length < interval) // If time less than 250ms
             {
                 WindowStateFunction();
                 return;
             }
-            lastClick = DateTime.Now;
+            lastClick = DateTime.Now; // Get time of the last click in borderCaptionPanel
 
             ReleaseCapture();
             SendMessage(Handle, 0x112, 0xf012, 0);
         }
 
 
-/*
-        protected override void WndProc(ref Message sizing)
+
+        protected override void WndProc(ref Message sizing) // For resizing main window
         {
-            if (sizing.Msg == 0x84)
+            if (sizing.Msg == 0x84) // If right mouse button is down
             {
                 Point pos = new Point(sizing.LParam.ToInt32());
-                pos = PointToClient(pos);
+                pos = PointToClient(pos); // Get mouse position in client field
 
                 // Left top corner ==========================================================================================
                 if (pos.X <= borderSide && pos.Y <= borderSide)
@@ -126,19 +126,19 @@ namespace PhotoTransfer
             base.WndProc(ref sizing);
         }
 
-*/
 
-        private void btnClose_Click(object sender, EventArgs e)
+
+        private void btnClose_Click(object sender, EventArgs e) // Button for close app
         {
             Dispose();
         }
 
-        private void btnMaxNorm_Click(object sender, EventArgs e)
+        private void btnMaxNorm_Click(object sender, EventArgs e) // Button for normalize and maximize main window
         {
             WindowStateFunction();
         }
 
-        private void WindowStateFunction()
+        private void WindowStateFunction() // Function for normalize and maximize main window
         {
             if (WindowState == FormWindowState.Normal)
             {
@@ -156,56 +156,55 @@ namespace PhotoTransfer
             }
         }
 
-        private void btnMinimaze_Click(object sender, EventArgs e)
+        private void btnMinimaze_Click(object sender, EventArgs e) // Button for minimize main window
         {
             WindowState = FormWindowState.Minimized;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ReloadTrees();
+            ReloadTrees(LeftTreeView); // Reload drives and directorys for LeftTreeView
         }
 
-        private void frmMain_Load(object sender, EventArgs e)
+        private void frmMain_Load(object sender, EventArgs e) // LOAD
         {
-            ReloadTrees();
+            ReloadTrees(LeftTreeView); // Reload drives and directorys for LeftTreeView
         }
 
-        private void ReloadTrees()
+        private void ReloadTrees(TreeView sourceTreeView) // Function for clear tree and add drives with icons again
         {
-            int i = 0;
-            LeftTreeView.Nodes.Clear();
-            foreach (DriveInfo driveInfo in DriveInfo.GetDrives())
+            int drivesCount = 0; // Variable for set drive number in tree
+            sourceTreeView.Nodes.Clear(); // Clear sourse tree
+            foreach (DriveInfo driveInfo in DriveInfo.GetDrives()) // Get drives
             {
 
-                if (driveInfo.DriveType == DriveType.CDRom && driveInfo.IsReady)
+                if (driveInfo.DriveType == DriveType.CDRom && driveInfo.IsReady) // If it is CD-Rom and it is ready
                 {
-                    i = TreeIcons(driveInfo, i, 0);
+                    drivesCount = TreeIcons(sourceTreeView, driveInfo, drivesCount, 0); // drivesCount get number from TreeIcons() and index icon 0 from iconsList
                 }
-                else if (driveInfo.DriveType == DriveType.Fixed && driveInfo.Name == @"C:\")
+                else if (driveInfo.DriveType == DriveType.Fixed && driveInfo.Name == @"C:\") // If it is HDD and it is drive C:\
                 {
-                    i = TreeIcons(driveInfo, i, 1);
+                    drivesCount = TreeIcons(sourceTreeView, driveInfo, drivesCount, 1); 
                 }
-                else if (driveInfo.DriveType == DriveType.Fixed && driveInfo.IsReady)
+                else if (driveInfo.DriveType == DriveType.Fixed && driveInfo.IsReady)  // If it is HDD and it is ready
                 {
-                    i = TreeIcons(driveInfo, i, 2);
+                    drivesCount = TreeIcons(sourceTreeView, driveInfo, drivesCount, 2);
                 }
             }
         }
 
-        private int TreeIcons(DriveInfo driveInfo, int driveNumber, int iconNumber)
+        private int TreeIcons(TreeView oldTreeView, DriveInfo driveInfo, int driveNumber, int iconNumber) // Add drive in tree and add icon
         {
-            LeftTreeView.Nodes.Add(driveInfo.Name);
-            LeftTreeView.Nodes[driveNumber].ImageIndex = iconNumber;
-            LeftTreeView.Nodes[driveNumber].SelectedImageIndex = iconNumber;
-            return ++driveNumber;
+            LeftTreeView.Nodes.Add(driveInfo.Name); // Add drive in tree
+            LeftTreeView.Nodes[driveNumber].ImageIndex = iconNumber; // Set selected icon for selected drive as default
+            LeftTreeView.Nodes[driveNumber].SelectedImageIndex = iconNumber; // Set icon for drive if drive was mouse selected
+            return ++driveNumber; // Return new number for next drive
         }
 
         private void LeftTreeView_AfterSelect(object sender, TreeViewEventArgs e) // Add directorys if LeftTreeView
         {
             ShowDirectorys(LeftTreeView);
         }
-
 
         private void ShowDirectorys(TreeView SelectedTreeView) // Get all directorys in selected node
         {
