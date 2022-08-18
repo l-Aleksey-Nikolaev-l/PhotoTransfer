@@ -34,10 +34,10 @@ namespace PhotoTransfer
             this.borderCaptionPanel = new System.Windows.Forms.Panel();
             this.btnMinimaze = new System.Windows.Forms.Button();
             this.btnMaxNorm = new System.Windows.Forms.Button();
+            this.iconsList = new System.Windows.Forms.ImageList(this.components);
             this.btnClose = new System.Windows.Forms.Button();
             this.leftPanel = new System.Windows.Forms.Panel();
             this.LeftTreeView = new System.Windows.Forms.TreeView();
-            this.iconsList = new System.Windows.Forms.ImageList(this.components);
             this.button1 = new System.Windows.Forms.Button();
             this.leftSplitter = new System.Windows.Forms.Splitter();
             this.rightPanel = new System.Windows.Forms.Panel();
@@ -69,11 +69,12 @@ namespace PhotoTransfer
             // 
             this.btnMinimaze.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnMinimaze.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.btnMinimaze.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.btnMinimaze.FlatAppearance.BorderSize = 0;
             this.btnMinimaze.FlatAppearance.MouseDownBackColor = System.Drawing.Color.MediumSeaGreen;
             this.btnMinimaze.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(20)))));
             this.btnMinimaze.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMinimaze.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnMinimaze.Font = new System.Drawing.Font("Arial Narrow", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnMinimaze.ForeColor = System.Drawing.SystemColors.Control;
             this.btnMinimaze.Location = new System.Drawing.Point(1099, 0);
             this.btnMinimaze.Margin = new System.Windows.Forms.Padding(0);
@@ -89,31 +90,47 @@ namespace PhotoTransfer
             // 
             this.btnMaxNorm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnMaxNorm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.btnMaxNorm.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnMaxNorm.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.btnMaxNorm.FlatAppearance.BorderSize = 0;
             this.btnMaxNorm.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.Highlight;
             this.btnMaxNorm.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(255)))));
             this.btnMaxNorm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMaxNorm.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnMaxNorm.ForeColor = System.Drawing.SystemColors.Control;
+            this.btnMaxNorm.ImageIndex = 0;
+            this.btnMaxNorm.ImageList = this.iconsList;
             this.btnMaxNorm.Location = new System.Drawing.Point(1134, 0);
             this.btnMaxNorm.Margin = new System.Windows.Forms.Padding(0);
             this.btnMaxNorm.Name = "btnMaxNorm";
             this.btnMaxNorm.Size = new System.Drawing.Size(31, 31);
             this.btnMaxNorm.TabIndex = 0;
-            this.btnMaxNorm.Text = "▲";
             this.btnMaxNorm.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.btnMaxNorm.UseVisualStyleBackColor = false;
             this.btnMaxNorm.Click += new System.EventHandler(this.btnMaxNorm_Click);
+            // 
+            // iconsList
+            // 
+            this.iconsList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("iconsList.ImageStream")));
+            this.iconsList.TransparentColor = System.Drawing.Color.Transparent;
+            this.iconsList.Images.SetKeyName(0, "Fill dock 48.png");
+            this.iconsList.Images.SetKeyName(1, "Breakout 48.png");
+            this.iconsList.Images.SetKeyName(2, "icons8-cd-48.png");
+            this.iconsList.Images.SetKeyName(3, "icons8-c-drive-48.png");
+            this.iconsList.Images.SetKeyName(4, "icons8-hdd-32.png");
+            this.iconsList.Images.SetKeyName(5, "Close Folder.png");
+            this.iconsList.Images.SetKeyName(6, "OpenFolder.png");
             // 
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.btnClose.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.btnClose.FlatAppearance.BorderSize = 0;
             this.btnClose.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
             this.btnClose.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(255)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClose.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnClose.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnClose.ForeColor = System.Drawing.SystemColors.Control;
             this.btnClose.Location = new System.Drawing.Point(1169, 0);
             this.btnClose.Margin = new System.Windows.Forms.Padding(0);
@@ -143,16 +160,16 @@ namespace PhotoTransfer
             this.LeftTreeView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.LeftTreeView.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.LeftTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LeftTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.LeftTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.LeftTreeView.ForeColor = System.Drawing.SystemColors.Control;
-            this.LeftTreeView.ImageIndex = 3;
+            this.LeftTreeView.ImageIndex = 5;
             this.LeftTreeView.ImageList = this.iconsList;
-            this.LeftTreeView.Indent = 30;
-            this.LeftTreeView.ItemHeight = 30;
+            this.LeftTreeView.Indent = 24;
+            this.LeftTreeView.ItemHeight = 24;
             this.LeftTreeView.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.LeftTreeView.Location = new System.Drawing.Point(0, 0);
             this.LeftTreeView.Name = "LeftTreeView";
-            this.LeftTreeView.SelectedImageIndex = 3;
+            this.LeftTreeView.SelectedImageIndex = 5;
             this.LeftTreeView.ShowLines = false;
             this.LeftTreeView.ShowPlusMinus = false;
             this.LeftTreeView.ShowRootLines = false;
@@ -160,16 +177,6 @@ namespace PhotoTransfer
             this.LeftTreeView.StateImageList = this.iconsList;
             this.LeftTreeView.TabIndex = 0;
             this.LeftTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.LeftTreeView_AfterSelect);
-            // 
-            // iconsList
-            // 
-            this.iconsList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("iconsList.ImageStream")));
-            this.iconsList.TransparentColor = System.Drawing.Color.Transparent;
-            this.iconsList.Images.SetKeyName(0, "icons8-cd-48.png");
-            this.iconsList.Images.SetKeyName(1, "icons8-c-drive-48.png");
-            this.iconsList.Images.SetKeyName(2, "icons8-hdd-32.png");
-            this.iconsList.Images.SetKeyName(3, "Close Folder.png");
-            this.iconsList.Images.SetKeyName(4, "OpenFolder.png");
             // 
             // button1
             // 

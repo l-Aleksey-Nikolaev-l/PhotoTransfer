@@ -115,12 +115,12 @@ namespace PhotoTransfer
             if (WindowState != FormWindowState.Maximized)
             {
                 Padding = new Padding(paddingSize);
-                btnMaxNorm.Text = "▲";
+                btnMaxNorm.ImageIndex = 0;
             }
             else
             {
                 Padding = new Padding(0);
-                btnMaxNorm.Text = "▼";
+                btnMaxNorm.ImageIndex = 1;
             }
 
             base.WndProc(ref sizing);
@@ -144,14 +144,14 @@ namespace PhotoTransfer
             {
                 Padding = new Padding(0);
                 WindowState = FormWindowState.Maximized;
-                btnMaxNorm.Text = "▼";
+                btnMaxNorm.ImageIndex = 1;
                 return;
             }
             else
             {
                 Padding = new Padding(paddingSize);
                 WindowState = FormWindowState.Normal;
-                btnMaxNorm.Text = "▲";
+                btnMaxNorm.ImageIndex = 0;
                 return;
             }
         }
@@ -180,15 +180,15 @@ namespace PhotoTransfer
 
                 if (driveInfo.DriveType == DriveType.CDRom && driveInfo.IsReady) // If it is CD-Rom and it is ready
                 {
-                    drivesCount = TreeIcons(sourceTreeView, driveInfo, drivesCount, 0); // drivesCount get number from TreeIcons() and index icon 0 from iconsList
+                    drivesCount = TreeIcons(sourceTreeView, driveInfo, drivesCount, 2); // drivesCount get number from TreeIcons() and index icon 0 from iconsList
                 }
                 else if (driveInfo.DriveType == DriveType.Fixed && driveInfo.Name == @"C:\") // If it is HDD and it is drive C:\
                 {
-                    drivesCount = TreeIcons(sourceTreeView, driveInfo, drivesCount, 1); 
+                    drivesCount = TreeIcons(sourceTreeView, driveInfo, drivesCount, 3); 
                 }
                 else if (driveInfo.DriveType == DriveType.Fixed && driveInfo.IsReady)  // If it is HDD and it is ready
                 {
-                    drivesCount = TreeIcons(sourceTreeView, driveInfo, drivesCount, 2);
+                    drivesCount = TreeIcons(sourceTreeView, driveInfo, drivesCount, 4);
                 }
             }
         }
@@ -241,5 +241,10 @@ namespace PhotoTransfer
             }
             return existNode = false; // Return "Don't have this name" if directory name not exists
         }
+
+
+
+
+        
     }
 }
