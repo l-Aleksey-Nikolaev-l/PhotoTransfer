@@ -83,5 +83,15 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="ICONS\Breakout 48.png" />
+    <Content Include="ICONS\CD.png" />
+    <Content Include="ICONS\Drive C.png" />
+    <Content Include="ICONS\Fill dock 48.png" />
+    <Content Include="ICONS\Folder Close.png" />
+    <Content Include="ICONS\Folder Open.png" />
+    <Content Include="ICONS\HDD.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

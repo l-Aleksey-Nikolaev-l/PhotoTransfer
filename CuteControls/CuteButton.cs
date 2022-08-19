@@ -151,18 +151,18 @@ namespace PhotoTransfer.CuteControls
             }
         }
 
-        //protected override void OnHandleCreated(EventArgs e)
-        //{
-        //    base.OnHandleCreated(e);
-        //    Parent.BackColorChanged += new EventHandler(Container_BackColor);
-        //}
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            Parent.BackColorChanged += new EventHandler(Container_BackColor);
+        }
 
-        //private void Container_BackColor(object sender, EventArgs e)
-        //{
-        //    if(DesignMode)
-        //    {
-        //        Invalidate();
-        //    }
-        //}
+        private void Container_BackColor(object sender, EventArgs e)
+        {
+            if (DesignMode)
+            {
+                Invalidate();
+            }
+        }
     }
 }
