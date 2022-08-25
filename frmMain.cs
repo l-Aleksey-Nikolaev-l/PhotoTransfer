@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.IO;
-using System.Text.RegularExpressions;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace PhotoTransfer
 {
@@ -32,6 +27,7 @@ namespace PhotoTransfer
         {
             InitializeComponent();
             Padding = new Padding(paddingSize);
+            DoubleBuffered = true;
         }
 
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
@@ -56,7 +52,7 @@ namespace PhotoTransfer
         }
 
 
-/*
+//*
         protected override void WndProc(ref Message sizing) // For resizing main window
         {
             if (sizing.Msg == 0x84) // If right mouse button is down
@@ -134,7 +130,7 @@ namespace PhotoTransfer
             base.WndProc(ref sizing);
         }
 
-*/
+//*/
 
 
 //########################################################################################################################################
@@ -214,11 +210,6 @@ namespace PhotoTransfer
             TopNodeIcon(5, e);
         }
 
-        private void LeftTreeView_BeforeLabelEdit(object sender, NodeLabelEditEventArgs e)
-        {
-            
-        }
-
         private void LeftTreeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
             RenameFolder(e);
@@ -230,16 +221,30 @@ namespace PhotoTransfer
         //########################################################################################################################################
         //########################################################################################################################################
 
+        TreeView PrevTV = null;
+        private void RightTreeView_BeforeSelect(object sender, TreeViewCancelEventArgs e)
+        {
+            if (PrevTV != null && PrevTV.SelectedNode != null)
+            {
+                PrevTV.SelectedNode.BackColor = Color.Empty;
+            }
+            PrevTV = selectedTreeView;
+        }
+
         private void RightTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
             selectedTreeView = e.Node.TreeView;
             allDirectorys.ShowDirectorys(selectedTreeView);
             CalculateFreeSpace(RightFreeSpaceLabel);
+
+            selectedTreeView.SelectedNode.BackColor = Color.FromArgb(160, 160, 160);
+            selectedTreeView.SelectedNode.ForeColor = Color.White;
         }
 
         private void RightTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             selectedTreeView = e.Node.TreeView;
+            
         }
 
         private void RightTreeView_BeforeExpand(object sender, TreeViewCancelEventArgs e)
@@ -435,5 +440,8 @@ namespace PhotoTransfer
             selectedTreeView = RightTreeView;
             CalculateFreeSpace(RightFreeSpaceLabel);
         }
+
+
+
     }
 }

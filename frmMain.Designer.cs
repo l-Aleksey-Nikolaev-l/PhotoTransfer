@@ -192,10 +192,11 @@ namespace PhotoTransfer
             this.LeftTreeView.SelectedImageKey = "Folder Open.png";
             this.LeftTreeView.ShowLines = false;
             this.LeftTreeView.ShowPlusMinus = false;
+            this.LeftTreeView.ShowRootLines = false;
             this.LeftTreeView.Size = new System.Drawing.Size(200, 733);
             this.LeftTreeView.StateImageList = iconsList;
             this.LeftTreeView.TabIndex = 0;
-            this.LeftTreeView.BeforeLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.LeftTreeView_BeforeLabelEdit);
+            this.LeftTreeView.TabStop = false;
             this.LeftTreeView.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.LeftTreeView_AfterLabelEdit);
             this.LeftTreeView.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.LeftTreeView_BeforeCollapse);
             this.LeftTreeView.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.LeftTreeView_BeforeExpand);
@@ -297,7 +298,6 @@ namespace PhotoTransfer
             this.RightTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.RightTreeView.ForeColor = System.Drawing.SystemColors.Control;
             this.RightTreeView.FullRowSelect = true;
-            this.RightTreeView.HideSelection = false;
             this.RightTreeView.ImageKey = "Folder Close.png";
             this.RightTreeView.ImageList = iconsList;
             this.RightTreeView.Indent = 32;
@@ -308,12 +308,15 @@ namespace PhotoTransfer
             this.RightTreeView.SelectedImageKey = "Folder Open.png";
             this.RightTreeView.ShowLines = false;
             this.RightTreeView.ShowPlusMinus = false;
+            this.RightTreeView.ShowRootLines = false;
             this.RightTreeView.Size = new System.Drawing.Size(200, 733);
             this.RightTreeView.StateImageList = iconsList;
             this.RightTreeView.TabIndex = 0;
+            this.RightTreeView.TabStop = false;
             this.RightTreeView.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.RightTreeView_AfterLabelEdit);
             this.RightTreeView.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.RightTreeView_BeforeCollapse);
             this.RightTreeView.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.RightTreeView_BeforeExpand);
+            this.RightTreeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.RightTreeView_BeforeSelect);
             this.RightTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.RightTreeView_AfterSelect);
             this.RightTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.RightTreeView_NodeMouseClick);
             // 
@@ -355,7 +358,7 @@ namespace PhotoTransfer
             this.RightFreeSpaceLabel.Name = "RightFreeSpaceLabel";
             this.RightFreeSpaceLabel.Size = new System.Drawing.Size(196, 23);
             this.RightFreeSpaceLabel.TabIndex = 2;
-            this.RightFreeSpaceLabel.Text = "_";
+            this.RightFreeSpaceLabel.Text = "Total space: 8888,88 Gb";
             this.RightFreeSpaceLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             this.RightFreeSpaceLabel.Click += new System.EventHandler(this.RightFreeSpaceLabel_Click);
             // 
@@ -368,7 +371,7 @@ namespace PhotoTransfer
             this.LeftFreeSpaceLabel.Name = "LeftFreeSpaceLabel";
             this.LeftFreeSpaceLabel.Size = new System.Drawing.Size(197, 23);
             this.LeftFreeSpaceLabel.TabIndex = 1;
-            this.LeftFreeSpaceLabel.Text = "_";
+            this.LeftFreeSpaceLabel.Text = "Total space: 8888,88 Gb";
             this.LeftFreeSpaceLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.LeftFreeSpaceLabel.Click += new System.EventHandler(this.LeftFreeSpaceLabel_Click);
             // 
