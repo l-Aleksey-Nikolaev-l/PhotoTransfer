@@ -15,14 +15,13 @@ namespace PhotoTransfer
 
         public void ShowDirectorys(TreeView SelectedTreeView) // Get all directorys in selected node
         {
-            
             foreach (string directoryInfo in Directory.GetDirectories(SelectedTreeView.SelectedNode.FullPath, "*", SearchOption.TopDirectoryOnly)) // Get all directorys in selected node
             {
                 info = new DirectoryInfo(directoryInfo); // Get properties of directory
 
                 if ((info.Attributes & FileAttributes.System) == FileAttributes.System | (info.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden) // If directory is System or Hidden
                 {
-                    continue; // Stop and go to next foreach loop
+                    continue; // Stop this loop and go to the next foreach loop
                 }
 
                 ExistNode(SelectedTreeView, Path.GetFileName(directoryInfo)); // Check exist directory name in selected node
@@ -70,7 +69,6 @@ namespace PhotoTransfer
 
         private void Reftreebranch(TreeView SelectedTreeView)
         {
-            
             selectedNode = SelectedTreeView.SelectedNode.Text; // Seve name from the last selected node in branch
 
             if (SelectedTreeView.SelectedNode.Parent != null) // If the last selected node have parent node

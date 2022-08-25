@@ -24,6 +24,10 @@ namespace PhotoTransfer
                 {
                     drivesCount = TreeIcons(sourceTreeView, driveInfo, drivesCount, 4);
                 }
+                else if (driveInfo.DriveType == DriveType.Removable && driveInfo.IsReady)  // If it is USB or SD-card and it is ready
+                {
+                    drivesCount = TreeIcons(sourceTreeView, driveInfo, drivesCount, 4);
+                }
             }
         }
 

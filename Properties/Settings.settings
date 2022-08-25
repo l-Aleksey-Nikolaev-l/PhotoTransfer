@@ -1,7 +1,15 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PhotoTransfer.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Fill" Type="System.Windows.Forms.ColorDepth" Scope="Application">
+      <Value Profile="(Default)">Depth32Bit</Value>
+    </Setting>
+    <Setting Name="ImageSize" Type="System.Drawing.Size" Scope="Application">
+      <Value Profile="(Default)">32, 32</Value>
+    </Setting>
+    <Setting Name="Tag" Type="System.Object" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
 </SettingsFile>

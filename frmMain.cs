@@ -20,13 +20,13 @@ namespace PhotoTransfer
         private DateTime lastClick = DateTime.Now; // Variable for borderCaptionPanel_MouseDown()
         private int borderSide = 12; // Variable for WndProc()
         private int paddingSize = 4; // Variable for WindowStateFunction() and WndProc()
-        
+        private bool diskSpace = false;
+
         TreeView selectedTreeView; // Variable for selected TreeView
 
         LoadAllDrives allDrives = new LoadAllDrives();
         LoadDirectorys allDirectorys = new LoadDirectorys();
-
-
+        
 
         public frmMain()
         {
@@ -56,7 +56,7 @@ namespace PhotoTransfer
         }
 
 
-/**/
+/*
         protected override void WndProc(ref Message sizing) // For resizing main window
         {
             if (sizing.Msg == 0x84) // If right mouse button is down
@@ -134,7 +134,7 @@ namespace PhotoTransfer
             base.WndProc(ref sizing);
         }
 
-/**/
+*/
 
 
 //########################################################################################################################################
@@ -178,7 +178,6 @@ namespace PhotoTransfer
 
         private void frmMain_Load(object sender, EventArgs e) // LOAD
         {
-            
             allDrives.GetAllDrives(LeftTreeView);
             allDrives.GetAllDrives(RightTreeView);
             LeftTreeView.SelectedNode = LeftTreeView.TopNode;
@@ -197,6 +196,7 @@ namespace PhotoTransfer
         {
             selectedTreeView = e.Node.TreeView;
             allDirectorys.ShowDirectorys(selectedTreeView);
+            CalculateFreeSpace(LeftFreeSpaceLabel);
         }
 
         private void LeftTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -214,6 +214,11 @@ namespace PhotoTransfer
             TopNodeIcon(5, e);
         }
 
+        private void LeftTreeView_BeforeLabelEdit(object sender, NodeLabelEditEventArgs e)
+        {
+            
+        }
+
         private void LeftTreeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
             RenameFolder(e);
@@ -229,6 +234,7 @@ namespace PhotoTransfer
         {
             selectedTreeView = e.Node.TreeView;
             allDirectorys.ShowDirectorys(selectedTreeView);
+            CalculateFreeSpace(RightFreeSpaceLabel);
         }
 
         private void RightTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -268,29 +274,81 @@ namespace PhotoTransfer
 
         private void RenameFolder(NodeLabelEditEventArgs e) // Rename selected node
         {
+
+            List<string> savedNodes = e.Node.FullPath.Split('/').ToList();
+            savedNodes[savedNodes.Count-1] = e.Label;
+            
             string oldFolderName, newFolderName;
             oldFolderName = e.Node.FullPath; // Get old folder name
             newFolderName = e.Node.Parent.FullPath + "\\" + e.Label; // Get new folder name
             Directory.Move(oldFolderName, newFolderName); // Rename folder
             selectedTreeView.SelectedNode.Name = e.Label;
             selectedTreeView.SelectedNode.Text = e.Label;
-            allDirectorys.RefreshDirectorys(this);
             selectedTreeView.SelectedNode.EndEdit(false); // Close editing
             selectedTreeView.LabelEdit = false;
+
+            allDrives.GetAllDrives(selectedTreeView);
+
+            foreach (TreeNode TN in selectedTreeView.Nodes)
+            {
+                if (TN.Text == savedNodes[0])
+                {
+                    selectedTreeView.Sort();
+                    selectedTreeView.SelectedNode = TN;
+                    
+                    break;
+                }
+            }
+
+            RestoreSelect(selectedTreeView.SelectedNode, savedNodes);
         }
 
-
-
-//########################################################################################################################################
-//########################################################################################################################################
-//########################################################################################################################################
-//########################################################################################################################################
-
-
-        private void contextMenuForTrees_Opened(object sender, EventArgs e) // Get selected TreeView
+        private void RestoreSelect(TreeNode selectedNode, List<string> nodesList)
         {
-            //selectedTreeView = ((TreeView)((ControlAccessibleObject)contextMenuForTrees.SourceControl.AccessibilityObject).Owner).TopNode.TreeView;
+            nodesList.RemoveAt(0);
+
+            if (nodesList.Count == 0)
+            {
+                return;
+            }
+
+            foreach (TreeNode TN in selectedNode.Nodes)
+            {
+                if (TN.Text == nodesList[0])
+                {
+                    selectedTreeView.SelectedNode = TN;
+                    RestoreSelect(TN, nodesList);
+                    break;
+                }
+            }
         }
+
+        private void CalculateFreeSpace(Label label)
+        {
+            if (diskSpace == true)
+            {
+                DriveInfo totalSpace = new DriveInfo(selectedTreeView.SelectedNode.FullPath);
+                Double space = totalSpace.TotalSize;
+                space /= Math.Pow(1024, 3);
+                space = Math.Round(space, 2);
+                label.Text = "Total space: " + space.ToString() + " Gb";
+            }
+            else
+            {
+                DriveInfo freeSpace = new DriveInfo(selectedTreeView.SelectedNode.FullPath);
+                Double space = freeSpace.AvailableFreeSpace;
+                space /= Math.Pow(1024, 3);
+                space = Math.Round(space, 2);
+                label.Text = "Free space: " + space.ToString() + " Gb";
+            }
+        }
+
+
+//########################################################################################################################################
+//########################################################################################################################################
+//########################################################################################################################################
+//########################################################################################################################################
+
 
         private void OpenFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -309,7 +367,7 @@ namespace PhotoTransfer
 
         private void CreateNewFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string newFolderName = "New Folder";
+            string newFolderName = "New_Folder";
 
             repeat:
 
@@ -333,6 +391,7 @@ namespace PhotoTransfer
                     break; // Exit from loop
                 }
             }
+
             allDirectorys.RefreshDirectorys(this);
         }
 
@@ -361,5 +420,20 @@ namespace PhotoTransfer
             allDirectorys.RefreshDirectorys(this);
         }
 
+        private void LeftFreeSpaceLabel_Click(object sender, EventArgs e)
+        {
+            if (diskSpace == false) diskSpace = true; else diskSpace = false;
+            selectedTreeView = new TreeView();
+            selectedTreeView = LeftTreeView;
+            CalculateFreeSpace(LeftFreeSpaceLabel);
+        }
+
+        private void RightFreeSpaceLabel_Click(object sender, EventArgs e)
+        {
+            if (diskSpace == false) diskSpace = true; else diskSpace = false;
+            selectedTreeView = new TreeView();
+            selectedTreeView = RightTreeView;
+            CalculateFreeSpace(RightFreeSpaceLabel);
+        }
     }
 }

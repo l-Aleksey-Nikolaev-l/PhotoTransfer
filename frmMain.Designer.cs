@@ -30,11 +30,11 @@ namespace PhotoTransfer
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.ImageList iconsList;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.borderCaptionPanel = new System.Windows.Forms.Panel();
             this.btnMinimaze = new System.Windows.Forms.Button();
             this.btnMaxNorm = new System.Windows.Forms.Button();
-            this.iconsList = new System.Windows.Forms.ImageList(this.components);
             this.btnClose = new System.Windows.Forms.Button();
             this.leftPanel = new System.Windows.Forms.Panel();
             this.LeftTreeView = new System.Windows.Forms.TreeView();
@@ -42,6 +42,7 @@ namespace PhotoTransfer
             this.OpenFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CloseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RefreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.CreateNewFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RenameFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -52,14 +53,31 @@ namespace PhotoTransfer
             this.rightSplitter = new System.Windows.Forms.Splitter();
             this.centerPanel = new System.Windows.Forms.Panel();
             this.bottomInfoPanel = new System.Windows.Forms.Panel();
+            this.RightFreeSpaceLabel = new System.Windows.Forms.Label();
+            this.LeftFreeSpaceLabel = new System.Windows.Forms.Label();
             this.bottomSplitter = new System.Windows.Forms.Splitter();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            iconsList = new System.Windows.Forms.ImageList(this.components);
             this.borderCaptionPanel.SuspendLayout();
             this.leftPanel.SuspendLayout();
             this.contextMenuForTrees.SuspendLayout();
             this.rightPanel.SuspendLayout();
             this.bottomInfoPanel.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // iconsList
+            // 
+            iconsList.ColorDepth = global::PhotoTransfer.Properties.Settings.Default.Fill;
+            iconsList.ImageSize = global::PhotoTransfer.Properties.Settings.Default.ImageSize;
+            iconsList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("iconsList.ImageStream")));
+            iconsList.Tag = global::PhotoTransfer.Properties.Settings.Default.Tag;
+            iconsList.TransparentColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            iconsList.Images.SetKeyName(0, "Fill dock 48.png");
+            iconsList.Images.SetKeyName(1, "Breakout 48.png");
+            iconsList.Images.SetKeyName(2, "CD.png");
+            iconsList.Images.SetKeyName(3, "Drive C.png");
+            iconsList.Images.SetKeyName(4, "HDD.png");
+            iconsList.Images.SetKeyName(5, "Folder Close.png");
+            iconsList.Images.SetKeyName(6, "Folder Open.png");
             // 
             // borderCaptionPanel
             // 
@@ -109,8 +127,8 @@ namespace PhotoTransfer
             this.btnMaxNorm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMaxNorm.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnMaxNorm.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnMaxNorm.ImageIndex = 0;
-            this.btnMaxNorm.ImageList = this.iconsList;
+            this.btnMaxNorm.ImageKey = "Fill dock 48.png";
+            this.btnMaxNorm.ImageList = iconsList;
             this.btnMaxNorm.Location = new System.Drawing.Point(1134, 0);
             this.btnMaxNorm.Margin = new System.Windows.Forms.Padding(0);
             this.btnMaxNorm.Name = "btnMaxNorm";
@@ -119,18 +137,6 @@ namespace PhotoTransfer
             this.btnMaxNorm.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.btnMaxNorm.UseVisualStyleBackColor = false;
             this.btnMaxNorm.Click += new System.EventHandler(this.btnMaxNorm_Click);
-            // 
-            // iconsList
-            // 
-            this.iconsList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("iconsList.ImageStream")));
-            this.iconsList.TransparentColor = System.Drawing.Color.Transparent;
-            this.iconsList.Images.SetKeyName(0, "Fill dock 48.png");
-            this.iconsList.Images.SetKeyName(1, "Breakout 48.png");
-            this.iconsList.Images.SetKeyName(2, "CD.png");
-            this.iconsList.Images.SetKeyName(3, "Drive C.png");
-            this.iconsList.Images.SetKeyName(4, "HDD.png");
-            this.iconsList.Images.SetKeyName(5, "Folder Close.png");
-            this.iconsList.Images.SetKeyName(6, "Folder Open.png");
             // 
             // btnClose
             // 
@@ -173,19 +179,23 @@ namespace PhotoTransfer
             this.LeftTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LeftTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.LeftTreeView.ForeColor = System.Drawing.SystemColors.Control;
-            this.LeftTreeView.ImageIndex = 5;
-            this.LeftTreeView.ImageList = this.iconsList;
+            this.LeftTreeView.FullRowSelect = true;
+            this.LeftTreeView.HideSelection = false;
+            this.LeftTreeView.ImageKey = "Folder Close.png";
+            this.LeftTreeView.ImageList = iconsList;
             this.LeftTreeView.Indent = 32;
             this.LeftTreeView.ItemHeight = 32;
             this.LeftTreeView.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.LeftTreeView.Location = new System.Drawing.Point(0, 0);
             this.LeftTreeView.Name = "LeftTreeView";
-            this.LeftTreeView.SelectedImageIndex = 6;
+            this.LeftTreeView.PathSeparator = "/";
+            this.LeftTreeView.SelectedImageKey = "Folder Open.png";
             this.LeftTreeView.ShowLines = false;
             this.LeftTreeView.ShowPlusMinus = false;
             this.LeftTreeView.Size = new System.Drawing.Size(200, 733);
-            this.LeftTreeView.StateImageList = this.iconsList;
+            this.LeftTreeView.StateImageList = iconsList;
             this.LeftTreeView.TabIndex = 0;
+            this.LeftTreeView.BeforeLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.LeftTreeView_BeforeLabelEdit);
             this.LeftTreeView.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.LeftTreeView_AfterLabelEdit);
             this.LeftTreeView.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.LeftTreeView_BeforeCollapse);
             this.LeftTreeView.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.LeftTreeView_BeforeExpand);
@@ -204,29 +214,33 @@ namespace PhotoTransfer
             this.toolStripSeparator1,
             this.DeleteFolderToolStripMenuItem});
             this.contextMenuForTrees.Name = "contextMenuLeftTree";
-            this.contextMenuForTrees.Size = new System.Drawing.Size(181, 170);
-            this.contextMenuForTrees.Opened += new System.EventHandler(this.contextMenuForTrees_Opened);
+            this.contextMenuForTrees.Size = new System.Drawing.Size(152, 148);
             // 
             // OpenFolderToolStripMenuItem
             // 
             this.OpenFolderToolStripMenuItem.Name = "OpenFolderToolStripMenuItem";
-            this.OpenFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.OpenFolderToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.OpenFolderToolStripMenuItem.Text = "Open";
             this.OpenFolderToolStripMenuItem.Click += new System.EventHandler(this.OpenFolderToolStripMenuItem_Click);
             // 
             // CloseToolStripMenuItem
             // 
             this.CloseToolStripMenuItem.Name = "CloseToolStripMenuItem";
-            this.CloseToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.CloseToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.CloseToolStripMenuItem.Text = "Close";
             this.CloseToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
             // RefreshToolStripMenuItem
             // 
             this.RefreshToolStripMenuItem.Name = "RefreshToolStripMenuItem";
-            this.RefreshToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.RefreshToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.RefreshToolStripMenuItem.Text = "Refresh";
             this.RefreshToolStripMenuItem.Click += new System.EventHandler(this.RefreshToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(148, 6);
             // 
             // CreateNewFolderToolStripMenuItem
             // 
@@ -282,17 +296,20 @@ namespace PhotoTransfer
             this.RightTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RightTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.RightTreeView.ForeColor = System.Drawing.SystemColors.Control;
-            this.RightTreeView.ImageIndex = 5;
-            this.RightTreeView.ImageList = this.iconsList;
+            this.RightTreeView.FullRowSelect = true;
+            this.RightTreeView.HideSelection = false;
+            this.RightTreeView.ImageKey = "Folder Close.png";
+            this.RightTreeView.ImageList = iconsList;
             this.RightTreeView.Indent = 32;
             this.RightTreeView.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.RightTreeView.Location = new System.Drawing.Point(0, 0);
             this.RightTreeView.Name = "RightTreeView";
-            this.RightTreeView.SelectedImageIndex = 6;
+            this.RightTreeView.PathSeparator = "/";
+            this.RightTreeView.SelectedImageKey = "Folder Open.png";
             this.RightTreeView.ShowLines = false;
             this.RightTreeView.ShowPlusMinus = false;
             this.RightTreeView.Size = new System.Drawing.Size(200, 733);
-            this.RightTreeView.StateImageList = this.iconsList;
+            this.RightTreeView.StateImageList = iconsList;
             this.RightTreeView.TabIndex = 0;
             this.RightTreeView.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.RightTreeView_AfterLabelEdit);
             this.RightTreeView.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.RightTreeView_BeforeCollapse);
@@ -320,12 +337,40 @@ namespace PhotoTransfer
             // 
             // bottomInfoPanel
             // 
+            this.bottomInfoPanel.Controls.Add(this.RightFreeSpaceLabel);
+            this.bottomInfoPanel.Controls.Add(this.LeftFreeSpaceLabel);
             this.bottomInfoPanel.Controls.Add(this.bottomSplitter);
             this.bottomInfoPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.bottomInfoPanel.Location = new System.Drawing.Point(0, 768);
             this.bottomInfoPanel.Name = "bottomInfoPanel";
             this.bottomInfoPanel.Size = new System.Drawing.Size(1200, 32);
             this.bottomInfoPanel.TabIndex = 7;
+            // 
+            // RightFreeSpaceLabel
+            // 
+            this.RightFreeSpaceLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.RightFreeSpaceLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.RightFreeSpaceLabel.ForeColor = System.Drawing.SystemColors.Control;
+            this.RightFreeSpaceLabel.Location = new System.Drawing.Point(1000, 6);
+            this.RightFreeSpaceLabel.Name = "RightFreeSpaceLabel";
+            this.RightFreeSpaceLabel.Size = new System.Drawing.Size(196, 23);
+            this.RightFreeSpaceLabel.TabIndex = 2;
+            this.RightFreeSpaceLabel.Text = "_";
+            this.RightFreeSpaceLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.RightFreeSpaceLabel.Click += new System.EventHandler(this.RightFreeSpaceLabel_Click);
+            // 
+            // LeftFreeSpaceLabel
+            // 
+            this.LeftFreeSpaceLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.LeftFreeSpaceLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.LeftFreeSpaceLabel.ForeColor = System.Drawing.SystemColors.Control;
+            this.LeftFreeSpaceLabel.Location = new System.Drawing.Point(3, 6);
+            this.LeftFreeSpaceLabel.Name = "LeftFreeSpaceLabel";
+            this.LeftFreeSpaceLabel.Size = new System.Drawing.Size(197, 23);
+            this.LeftFreeSpaceLabel.TabIndex = 1;
+            this.LeftFreeSpaceLabel.Text = "_";
+            this.LeftFreeSpaceLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.LeftFreeSpaceLabel.Click += new System.EventHandler(this.LeftFreeSpaceLabel_Click);
             // 
             // bottomSplitter
             // 
@@ -335,11 +380,6 @@ namespace PhotoTransfer
             this.bottomSplitter.Size = new System.Drawing.Size(1200, 4);
             this.bottomSplitter.TabIndex = 0;
             this.bottomSplitter.TabStop = false;
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(148, 6);
             // 
             // frmMain
             // 
@@ -384,7 +424,6 @@ namespace PhotoTransfer
         private System.Windows.Forms.Panel bottomInfoPanel;
         private System.Windows.Forms.Splitter bottomSplitter;
         private System.Windows.Forms.TreeView LeftTreeView;
-        private System.Windows.Forms.ImageList iconsList;
         private System.Windows.Forms.ContextMenuStrip contextMenuForTrees;
         private System.Windows.Forms.ToolStripMenuItem OpenFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem CloseToolStripMenuItem;
@@ -395,6 +434,8 @@ namespace PhotoTransfer
         private System.Windows.Forms.ToolStripMenuItem RefreshToolStripMenuItem;
         private System.Windows.Forms.TreeView RightTreeView;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.Label LeftFreeSpaceLabel;
+        private System.Windows.Forms.Label RightFreeSpaceLabel;
     }
 }
 
