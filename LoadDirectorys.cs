@@ -10,7 +10,8 @@ namespace PhotoTransfer
     {
         bool existNode = false; // Variable for exist directorys
         string selectedNode = null; // Variable for save the last selected node in branch
-        LoadAllDrives allDrives = new LoadAllDrives();
+
+        LoadAllDrives allDrives = new LoadAllDrives(); // Create new class
         DirectoryInfo info; // Variable for directory attributes
 
         public void ShowDirectorys(TreeView SelectedTreeView) // Get all directorys in selected node
