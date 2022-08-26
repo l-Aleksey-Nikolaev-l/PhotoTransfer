@@ -180,7 +180,6 @@ namespace PhotoTransfer
             this.LeftTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.LeftTreeView.ForeColor = System.Drawing.SystemColors.Control;
             this.LeftTreeView.FullRowSelect = true;
-            this.LeftTreeView.HideSelection = false;
             this.LeftTreeView.ImageKey = "Folder Close.png";
             this.LeftTreeView.ImageList = iconsList;
             this.LeftTreeView.Indent = 32;
@@ -200,6 +199,7 @@ namespace PhotoTransfer
             this.LeftTreeView.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.LeftTreeView_AfterLabelEdit);
             this.LeftTreeView.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.LeftTreeView_BeforeCollapse);
             this.LeftTreeView.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.LeftTreeView_BeforeExpand);
+            this.LeftTreeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.LeftTreeView_BeforeSelect);
             this.LeftTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.LeftTreeView_AfterSelect);
             this.LeftTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.LeftTreeView_NodeMouseClick);
             // 

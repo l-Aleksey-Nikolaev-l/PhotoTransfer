@@ -10,14 +10,14 @@ namespace PhotoTransfer
 {
     public partial class frmMain : Form
     {
-
-
         private DateTime lastClick = DateTime.Now; // Variable for borderCaptionPanel_MouseDown()
         private int borderSide = 12; // Variable for WndProc()
         private int paddingSize = 4; // Variable for WindowStateFunction() and WndProc()
         private bool diskSpace = false;
 
         TreeView selectedTreeView; // Variable for selected TreeView
+        TreeView PrevLeftTreeView = null;
+        TreeView PrevRightTreeView = null;
 
         LoadAllDrives allDrives = new LoadAllDrives();
         LoadDirectorys allDirectorys = new LoadDirectorys();
@@ -133,10 +133,10 @@ namespace PhotoTransfer
 //*/
 
 
-//########################################################################################################################################
-//########################################################################################################################################
-//########################################################################################################################################
-//########################################################################################################################################
+        //########################################################################################################################################
+        //########################################################################################################################################
+        //########################################################################################################################################
+        //########################################################################################################################################
 
 
         private void btnClose_Click(object sender, EventArgs e) // Button for close app
@@ -178,21 +178,34 @@ namespace PhotoTransfer
             allDrives.GetAllDrives(RightTreeView);
             LeftTreeView.SelectedNode = LeftTreeView.TopNode;
             RightTreeView.SelectedNode = RightTreeView.TopNode;
+            PrevLeftTreeView = LeftTreeView;
+            PrevRightTreeView = RightTreeView;
 
         }
 
 
-//########################################################################################################################################
-//########################################################################################################################################
-//########################################################################################################################################
-//########################################################################################################################################
+        //########################################################################################################################################
+        //########################################################################################################################################
+        //########################################################################################################################################
+        //########################################################################################################################################
 
+        private void LeftTreeView_BeforeSelect(object sender, TreeViewCancelEventArgs e)
+        {
+            if (PrevLeftTreeView != null && PrevLeftTreeView.SelectedNode != null)
+            {
+                PrevLeftTreeView.SelectedNode.BackColor = Color.Empty;
+            }
+            PrevLeftTreeView = selectedTreeView;
+        }
 
         private void LeftTreeView_AfterSelect(object sender, TreeViewEventArgs e) // Add directorys to LeftTreeView
         {
             selectedTreeView = e.Node.TreeView;
             allDirectorys.ShowDirectorys(selectedTreeView);
             CalculateFreeSpace(LeftFreeSpaceLabel);
+
+            selectedTreeView.SelectedNode.BackColor = Color.FromArgb(120, 120, 120);
+            selectedTreeView.SelectedNode.ForeColor = Color.White;
         }
 
         private void LeftTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -221,14 +234,13 @@ namespace PhotoTransfer
         //########################################################################################################################################
         //########################################################################################################################################
 
-        TreeView PrevTV = null;
         private void RightTreeView_BeforeSelect(object sender, TreeViewCancelEventArgs e)
         {
-            if (PrevTV != null && PrevTV.SelectedNode != null)
+            if (PrevRightTreeView != null && PrevRightTreeView.SelectedNode != null)
             {
-                PrevTV.SelectedNode.BackColor = Color.Empty;
+                PrevRightTreeView.SelectedNode.BackColor = Color.Empty;
             }
-            PrevTV = selectedTreeView;
+            PrevRightTreeView = selectedTreeView;
         }
 
         private void RightTreeView_AfterSelect(object sender, TreeViewEventArgs e)
@@ -237,7 +249,7 @@ namespace PhotoTransfer
             allDirectorys.ShowDirectorys(selectedTreeView);
             CalculateFreeSpace(RightFreeSpaceLabel);
 
-            selectedTreeView.SelectedNode.BackColor = Color.FromArgb(160, 160, 160);
+            selectedTreeView.SelectedNode.BackColor = Color.FromArgb(120, 120, 120);
             selectedTreeView.SelectedNode.ForeColor = Color.White;
         }
 
@@ -263,10 +275,10 @@ namespace PhotoTransfer
         }
 
 
-//########################################################################################################################################
-//########################################################################################################################################
-//########################################################################################################################################
-//########################################################################################################################################
+        //########################################################################################################################################
+        //########################################################################################################################################
+        //########################################################################################################################################
+        //########################################################################################################################################
 
         
         private void TopNodeIcon(int indexIcon, TreeViewCancelEventArgs e) // Save drives icons
@@ -349,10 +361,10 @@ namespace PhotoTransfer
         }
 
 
-//########################################################################################################################################
-//########################################################################################################################################
-//########################################################################################################################################
-//########################################################################################################################################
+        //########################################################################################################################################
+        //########################################################################################################################################
+        //########################################################################################################################################
+        //########################################################################################################################################
 
 
         private void OpenFolderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -440,8 +452,6 @@ namespace PhotoTransfer
             selectedTreeView = RightTreeView;
             CalculateFreeSpace(RightFreeSpaceLabel);
         }
-
-
 
     }
 }
