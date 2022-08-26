@@ -198,7 +198,7 @@ namespace PhotoTransfer
             PrevLeftTreeView = selectedTreeView;
         }
 
-        private void LeftTreeView_AfterSelect(object sender, TreeViewEventArgs e) // Add directorys to LeftTreeView
+        private void LeftTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
             selectedTreeView = e.Node.TreeView;
             allDirectorys.ShowDirectorys(selectedTreeView);
@@ -289,7 +289,7 @@ namespace PhotoTransfer
             }
         }
 
-        private void RenameFolder(NodeLabelEditEventArgs e) // Rename selected node
+        private void RenameFolder(NodeLabelEditEventArgs e) // Rename selected node and folder
         {
 
             List<string> savedNodes = e.Node.FullPath.Split('/').ToList();
