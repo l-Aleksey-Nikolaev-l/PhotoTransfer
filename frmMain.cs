@@ -206,6 +206,7 @@ namespace PhotoTransfer
 
             selectedTreeView.SelectedNode.BackColor = Color.FromArgb(120, 120, 120);
             selectedTreeView.SelectedNode.ForeColor = Color.White;
+            ShowContent();
         }
 
         private void LeftTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -251,6 +252,7 @@ namespace PhotoTransfer
 
             selectedTreeView.SelectedNode.BackColor = Color.FromArgb(120, 120, 120);
             selectedTreeView.SelectedNode.ForeColor = Color.White;
+            ShowContent();
         }
 
         private void RightTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -453,5 +455,112 @@ namespace PhotoTransfer
             CalculateFreeSpace(RightFreeSpaceLabel);
         }
 
+        private void cuteButton1_Click(object sender, EventArgs e)
+        {
+            //ShowContent();
+        }
+
+        private void ShowContent()
+        {
+            listView1.BeginUpdate();
+
+            listView1.Clear();
+
+            int count = 0;
+            string path = selectedTreeView.SelectedNode.FullPath;
+            string extension;
+            FileInfo fi;
+            DirectoryInfo di;
+            FileAttributes forFolder;
+
+            foreach (string fileInfo in Directory.GetFileSystemEntries(path, "*", SearchOption.TopDirectoryOnly))
+            {
+                fi = new FileInfo(fileInfo);
+                di = new DirectoryInfo(fileInfo);
+                forFolder = File.GetAttributes(fi.ToString());
+                extension = fi.Extension;
+
+                if ((di.Attributes & FileAttributes.System) == FileAttributes.System || (di.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden)
+                {
+                    continue;
+                }
+
+                if ((forFolder & FileAttributes.Directory) == FileAttributes.Directory)
+                {
+                    listView1.Items.Add(Path.GetFileName(fileInfo), 2);
+                    listView1.Items[count].Group = listView1.Groups[0];
+                    count++;
+                    continue;
+                }
+
+                switch (extension)
+                {
+                    case ".dng":
+                    case ".DNG":
+                        listView1.Items.Add(Path.GetFileName(fileInfo), 0);
+                        listView1.Items[count].Group = listView1.Groups[1];
+                        break;
+
+                    case ".fff":
+                    case ".FFF":
+                        listView1.Items.Add(Path.GetFileName(fileInfo), 1);
+                        listView1.Items[count].Group = listView1.Groups[1];
+                        break;
+
+                    case ".jpg":
+                    case ".JPG":
+                    case ".JPEG":
+                    case ".jpeg":
+                        listView1.Items.Add(Path.GetFileName(fileInfo), 4);
+                        listView1.Items[count].Group = listView1.Groups[1];
+                        break;
+
+                    case ".nef":
+                    case ".NEF":
+                        listView1.Items.Add(Path.GetFileName(fileInfo), 5);
+                        listView1.Items[count].Group = listView1.Groups[1];
+                        break;
+
+                    case ".png":
+                    case ".PNG":
+                        listView1.Items.Add(Path.GetFileName(fileInfo), 6);
+                        listView1.Items[count].Group = listView1.Groups[1];
+                        break;
+
+                    case ".raw":
+                    case ".RAW":
+                        listView1.Items.Add(Path.GetFileName(fileInfo), 7);
+                        listView1.Items[count].Group = listView1.Groups[1];
+                        break;
+
+                    case ".tif":
+                    case ".tiff":
+                    case ".TIF":
+                    case ".TIFF":
+                        listView1.Items.Add(Path.GetFileName(fileInfo), 8);
+                        listView1.Items[count].Group = listView1.Groups[1];
+                        break;
+
+                    case ".mp4":
+                    case ".mov":
+                    case ".wma":
+                    case ".avi":
+                    case ".MP4":
+                    case ".MOV":
+                    case ".WMA":
+                    case ".AVI":
+                        listView1.Items.Add(Path.GetFileName(fileInfo), 9);
+                        listView1.Items[count].Group = listView1.Groups[1];
+                        break;
+
+                    default:
+                        listView1.Items.Add(Path.GetFileName(fileInfo), 10);
+                        listView1.Items[count].Group = listView1.Groups[1];
+                        break;
+                }
+                count++;
+            }
+            listView1.EndUpdate();
+        }
     }
 }
