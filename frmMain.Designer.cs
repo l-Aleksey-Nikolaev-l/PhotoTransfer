@@ -216,7 +216,7 @@ namespace PhotoTransfer
             this.LeftTreeView.ShowLines = false;
             this.LeftTreeView.ShowPlusMinus = false;
             this.LeftTreeView.ShowRootLines = false;
-            this.LeftTreeView.Size = new System.Drawing.Size(200, 658);
+            this.LeftTreeView.Size = new System.Drawing.Size(200, 660);
             this.LeftTreeView.StateImageList = iconsList;
             this.LeftTreeView.TabIndex = 0;
             this.LeftTreeView.TabStop = false;
@@ -349,7 +349,7 @@ namespace PhotoTransfer
             this.RightTreeView.ShowLines = false;
             this.RightTreeView.ShowPlusMinus = false;
             this.RightTreeView.ShowRootLines = false;
-            this.RightTreeView.Size = new System.Drawing.Size(200, 658);
+            this.RightTreeView.Size = new System.Drawing.Size(200, 660);
             this.RightTreeView.StateImageList = iconsList;
             this.RightTreeView.TabIndex = 0;
             this.RightTreeView.TabStop = false;
