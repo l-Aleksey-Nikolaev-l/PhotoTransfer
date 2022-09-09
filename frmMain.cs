@@ -229,6 +229,13 @@ namespace PhotoTransfer
             RenameFolder(e);
         }
 
+        private void LeftTreeView_MouseEnter(object sender, EventArgs e)
+        {
+            selectedTreeView = LeftTreeView;
+            selectedTreeView.Focus();
+            ShowContent();
+        }
+
 
         //########################################################################################################################################
         //########################################################################################################################################
@@ -276,13 +283,20 @@ namespace PhotoTransfer
             RenameFolder(e);
         }
 
+        private void RightTreeView_MouseEnter(object sender, EventArgs e)
+        {
+            selectedTreeView = RightTreeView;
+            selectedTreeView.Focus();
+            ShowContent();
+        }
+
 
         //########################################################################################################################################
         //########################################################################################################################################
         //########################################################################################################################################
         //########################################################################################################################################
 
-        
+
         private void TopNodeIcon(int indexIcon, TreeViewCancelEventArgs e) // Save drives icons
         {
             if (e.Node.Text.Contains(':') == false) // Change icons for nodes without ":"
@@ -455,11 +469,6 @@ namespace PhotoTransfer
             CalculateFreeSpace(RightFreeSpaceLabel);
         }
 
-        private void cuteButton1_Click(object sender, EventArgs e)
-        {
-            //ShowContent();
-        }
-
         private void ShowContent()
         {
             listView1.BeginUpdate();
@@ -562,5 +571,7 @@ namespace PhotoTransfer
             }
             listView1.EndUpdate();
         }
+
+        
     }
 }

@@ -32,8 +32,8 @@ namespace PhotoTransfer
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ImageList iconsList;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("GroupForFolders", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("GroupForFiles", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("GroupForFolders", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("GroupForFiles", System.Windows.Forms.HorizontalAlignment.Left);
             this.borderCaptionPanel = new System.Windows.Forms.Panel();
             this.btnMinimaze = new System.Windows.Forms.Button();
             this.btnMaxNorm = new System.Windows.Forms.Button();
@@ -216,7 +216,7 @@ namespace PhotoTransfer
             this.LeftTreeView.ShowLines = false;
             this.LeftTreeView.ShowPlusMinus = false;
             this.LeftTreeView.ShowRootLines = false;
-            this.LeftTreeView.Size = new System.Drawing.Size(200, 660);
+            this.LeftTreeView.Size = new System.Drawing.Size(200, 2026);
             this.LeftTreeView.StateImageList = iconsList;
             this.LeftTreeView.TabIndex = 0;
             this.LeftTreeView.TabStop = false;
@@ -226,6 +226,8 @@ namespace PhotoTransfer
             this.LeftTreeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.LeftTreeView_BeforeSelect);
             this.LeftTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.LeftTreeView_AfterSelect);
             this.LeftTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.LeftTreeView_NodeMouseClick);
+            this.LeftTreeView.Enter += new System.EventHandler(this.LeftTreeView_Enter);
+            this.LeftTreeView.MouseEnter += new System.EventHandler(this.LeftTreeView_MouseEnter);
             // 
             // contextMenuForTrees
             // 
@@ -349,7 +351,7 @@ namespace PhotoTransfer
             this.RightTreeView.ShowLines = false;
             this.RightTreeView.ShowPlusMinus = false;
             this.RightTreeView.ShowRootLines = false;
-            this.RightTreeView.Size = new System.Drawing.Size(200, 660);
+            this.RightTreeView.Size = new System.Drawing.Size(200, 2026);
             this.RightTreeView.StateImageList = iconsList;
             this.RightTreeView.TabIndex = 0;
             this.RightTreeView.TabStop = false;
@@ -359,6 +361,8 @@ namespace PhotoTransfer
             this.RightTreeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.RightTreeView_BeforeSelect);
             this.RightTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.RightTreeView_AfterSelect);
             this.RightTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.RightTreeView_NodeMouseClick);
+            this.RightTreeView.Enter += new System.EventHandler(this.RightTreeView_Enter);
+            this.RightTreeView.MouseEnter += new System.EventHandler(this.RightTreeView_MouseEnter);
             // 
             // rightSplitter
             // 
@@ -388,13 +392,13 @@ namespace PhotoTransfer
             this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
-            listViewGroup1.Header = "GroupForFolders";
-            listViewGroup1.Name = "GroupForFolders";
-            listViewGroup2.Header = "GroupForFiles";
-            listViewGroup2.Name = "GroupForFiles";
+            listViewGroup3.Header = "GroupForFolders";
+            listViewGroup3.Name = "GroupForFolders";
+            listViewGroup4.Header = "GroupForFiles";
+            listViewGroup4.Name = "GroupForFiles";
             this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1,
-            listViewGroup2});
+            listViewGroup3,
+            listViewGroup4});
             this.listView1.HideSelection = false;
             this.listView1.LargeImageList = this.iconsForFiles;
             this.listView1.Location = new System.Drawing.Point(6, 5);
