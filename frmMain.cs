@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PhotoTransfer
@@ -13,7 +14,8 @@ namespace PhotoTransfer
         private DateTime lastClick = DateTime.Now; // Variable for borderCaptionPanel_MouseDown()
         private int borderSide = 12; // Variable for WndProc()
         private int paddingSize = 4; // Variable for WindowStateFunction() and WndProc()
-        private bool diskSpace = false;
+        private bool diskSpaceLeft = false;
+        private bool diskSpaceRight = false;
 
         TreeView selectedTreeView; // Variable for selected TreeView
         TreeView PrevLeftTreeView = null;
@@ -52,7 +54,7 @@ namespace PhotoTransfer
         }
 
 
-//*
+/*
         protected override void WndProc(ref Message sizing) // For resizing main window
         {
             if (sizing.Msg == 0x84) // If right mouse button is down
@@ -130,7 +132,7 @@ namespace PhotoTransfer
             base.WndProc(ref sizing);
         }
 
-//*/
+*/
 
 
         //########################################################################################################################################
@@ -202,7 +204,7 @@ namespace PhotoTransfer
         {
             selectedTreeView = e.Node.TreeView;
             allDirectorys.ShowDirectorys(selectedTreeView);
-            CalculateFreeSpace(LeftFreeSpaceLabel);
+            CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft);
 
             selectedTreeView.SelectedNode.BackColor = Color.FromArgb(120, 120, 120);
             selectedTreeView.SelectedNode.ForeColor = Color.White;
@@ -255,7 +257,7 @@ namespace PhotoTransfer
         {
             selectedTreeView = e.Node.TreeView;
             allDirectorys.ShowDirectorys(selectedTreeView);
-            CalculateFreeSpace(RightFreeSpaceLabel);
+            CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight);
 
             selectedTreeView.SelectedNode.BackColor = Color.FromArgb(120, 120, 120);
             selectedTreeView.SelectedNode.ForeColor = Color.White;
@@ -309,11 +311,12 @@ namespace PhotoTransfer
         {
 
             List<string> savedNodes = e.Node.FullPath.Split('/').ToList();
+
             savedNodes[savedNodes.Count-1] = e.Label;
             
             string oldFolderName, newFolderName;
             oldFolderName = e.Node.FullPath; // Get old folder name
-            newFolderName = e.Node.Parent.FullPath + "\\" + e.Label; // Get new folder name
+            newFolderName = e.Node.Parent.FullPath + "/" + e.Label; // Get new folder name
             Directory.Move(oldFolderName, newFolderName); // Rename folder
             selectedTreeView.SelectedNode.Name = e.Label;
             selectedTreeView.SelectedNode.Text = e.Label;
@@ -356,7 +359,7 @@ namespace PhotoTransfer
             }
         }
 
-        private void CalculateFreeSpace(Label label)
+        private void CalculateFreeSpace(Label label, bool diskSpace)
         {
             if (diskSpace == true)
             {
@@ -426,6 +429,8 @@ namespace PhotoTransfer
             }
 
             allDirectorys.RefreshDirectorys(this);
+            selectedTreeView.SelectedNode.BackColor = Color.Empty;
+
         }
 
         private void RenameFolderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -451,22 +456,30 @@ namespace PhotoTransfer
                 }
             }
             allDirectorys.RefreshDirectorys(this);
+            selectedTreeView.SelectedNode.BackColor = Color.Empty;
         }
+
+
+        //########################################################################################################################################
+        //########################################################################################################################################
+        //########################################################################################################################################
+        //########################################################################################################################################
+
 
         private void LeftFreeSpaceLabel_Click(object sender, EventArgs e)
         {
-            if (diskSpace == false) diskSpace = true; else diskSpace = false;
+            if (diskSpaceLeft == false) diskSpaceLeft = true; else diskSpaceLeft = false;
             selectedTreeView = new TreeView();
             selectedTreeView = LeftTreeView;
-            CalculateFreeSpace(LeftFreeSpaceLabel);
+            CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft);
         }
 
         private void RightFreeSpaceLabel_Click(object sender, EventArgs e)
         {
-            if (diskSpace == false) diskSpace = true; else diskSpace = false;
+            if (diskSpaceRight == false) diskSpaceRight = true; else diskSpaceRight = false;
             selectedTreeView = new TreeView();
             selectedTreeView = RightTreeView;
-            CalculateFreeSpace(RightFreeSpaceLabel);
+            CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight);
         }
 
         private void ShowContent()
@@ -572,6 +585,53 @@ namespace PhotoTransfer
             listView1.EndUpdate();
         }
 
-        
+
+        //########################################################################################################################################
+        //########################################################################################################################################
+        //########################################################################################################################################
+        //########################################################################################################################################
+
+
+        private void buttonForCopy_MouseEnter(object sender, EventArgs e)
+        {
+            bottomInfoPanel.BackColor = Color.Teal;
+        }
+
+        private void buttonForCopy_MouseLeave(object sender, EventArgs e)
+        {
+            bottomInfoPanel.BackColor = Color.FromArgb(30, 30, 30);
+        }
+
+        private void buttonForMove_MouseEnter(object sender, EventArgs e)
+        {
+            bottomInfoPanel.BackColor = Color.DarkGoldenrod;
+        }
+
+        private void buttonForMove_MouseLeave(object sender, EventArgs e)
+        {
+            bottomInfoPanel.BackColor = Color.FromArgb(30, 30, 30);
+        }
+
+        async private void buttonForCopy_Click(object sender, EventArgs e)
+        {
+            buttonForCopy.Enabled = false;
+            buttonForMove.Enabled = false;
+            progressTransfer.Visible = true;
+            await Task.Delay(100);
+            bottomInfoPanel.BackColor = Color.Teal;
+            await Task.Delay(100);
+            progressTransfer.Value = 99;
+        }
+
+        async private void buttonForMove_Click(object sender, EventArgs e)
+        {
+            buttonForCopy.Enabled = false;
+            buttonForMove.Enabled = false;
+            progressTransfer.Visible = true;
+            await Task.Delay(100);
+            bottomInfoPanel.BackColor = Color.DarkGoldenrod;
+            await Task.Delay(100);
+            progressTransfer.Value = 99;
+        }
     }
 }
