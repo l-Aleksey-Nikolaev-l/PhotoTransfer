@@ -14,6 +14,7 @@ namespace PhotoTransfer
         private DateTime lastClick = DateTime.Now; // Variable for borderCaptionPanel_MouseDown()
         private int borderSide = 12; // Variable for WndProc()
         private int paddingSize = 4; // Variable for WindowStateFunction() and WndProc()
+        int filesCount = 0;
         private bool diskSpaceLeft = false;
         private bool diskSpaceRight = false;
 
@@ -209,6 +210,7 @@ namespace PhotoTransfer
             selectedTreeView.SelectedNode.BackColor = Color.FromArgb(120, 120, 120);
             selectedTreeView.SelectedNode.ForeColor = Color.White;
             ShowContent();
+            FilesFinded();
         }
 
         private void LeftTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -236,6 +238,7 @@ namespace PhotoTransfer
             selectedTreeView = LeftTreeView;
             selectedTreeView.Focus();
             ShowContent();
+            FilesFinded();
         }
 
 
@@ -379,6 +382,23 @@ namespace PhotoTransfer
             }
         }
 
+        private void FilesFinded()
+        {
+            string folderWithFiles = LeftTreeView.SelectedNode.Text;
+            if(filesCount > 0)
+            {
+                label1.Text = "In (" + folderWithFiles + ") folder finded " + filesCount + " files";
+            }
+            else if(filesCount == 1)
+            {
+                label1.Text = "In (" + folderWithFiles + ") folder finded 1 file";
+            }
+            else
+            {
+                label1.Text = "In (" + folderWithFiles + ") folder files not founded";
+            }
+        }
+
 
         //########################################################################################################################################
         //########################################################################################################################################
@@ -488,6 +508,7 @@ namespace PhotoTransfer
 
             listView1.Clear();
 
+            filesCount = 0;
             int count = 0;
             string path = selectedTreeView.SelectedNode.FullPath;
             string extension;
@@ -521,12 +542,14 @@ namespace PhotoTransfer
                     case ".DNG":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 0);
                         listView1.Items[count].Group = listView1.Groups[1];
+                        filesCount++;
                         break;
 
                     case ".fff":
                     case ".FFF":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 1);
                         listView1.Items[count].Group = listView1.Groups[1];
+                        filesCount++;
                         break;
 
                     case ".jpg":
@@ -535,24 +558,28 @@ namespace PhotoTransfer
                     case ".jpeg":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 4);
                         listView1.Items[count].Group = listView1.Groups[1];
+                        filesCount++;
                         break;
 
                     case ".nef":
                     case ".NEF":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 5);
                         listView1.Items[count].Group = listView1.Groups[1];
+                        filesCount++;
                         break;
 
                     case ".png":
                     case ".PNG":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 6);
                         listView1.Items[count].Group = listView1.Groups[1];
+                        filesCount++;
                         break;
 
                     case ".raw":
                     case ".RAW":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 7);
                         listView1.Items[count].Group = listView1.Groups[1];
+                        filesCount++;
                         break;
 
                     case ".tif":
@@ -561,6 +588,7 @@ namespace PhotoTransfer
                     case ".TIFF":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 8);
                         listView1.Items[count].Group = listView1.Groups[1];
+                        filesCount++;
                         break;
 
                     case ".mp4":
@@ -573,12 +601,11 @@ namespace PhotoTransfer
                     case ".AVI":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 9);
                         listView1.Items[count].Group = listView1.Groups[1];
+                        filesCount++;
                         break;
 
                     default:
-                        listView1.Items.Add(Path.GetFileName(fileInfo), 10);
-                        listView1.Items[count].Group = listView1.Groups[1];
-                        break;
+                        continue;
                 }
                 count++;
             }
