@@ -56,25 +56,26 @@ namespace PhotoTransfer
             this.rightTreeLabel = new System.Windows.Forms.Label();
             this.rightSplitter = new System.Windows.Forms.Splitter();
             this.centerPanel = new System.Windows.Forms.Panel();
+            this.panelForFilesCount = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.buttonForMove = new System.Windows.Forms.Button();
             this.buttonForCopy = new System.Windows.Forms.Button();
+            this.progressTransfer = new System.Windows.Forms.ProgressBar();
             this.listView1 = new System.Windows.Forms.ListView();
             this.iconsForFiles = new System.Windows.Forms.ImageList(this.components);
             this.LeftFreeSpaceLabel = new System.Windows.Forms.Label();
             this.RightFreeSpaceLabel = new System.Windows.Forms.Label();
             this.bottomInfoPanel = new System.Windows.Forms.Panel();
-            this.progressTransfer = new System.Windows.Forms.ProgressBar();
             this.splitter1 = new System.Windows.Forms.Splitter();
-            this.panelForFilesCount = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
+            this.backgroundCopyMove = new System.ComponentModel.BackgroundWorker();
             iconsList = new System.Windows.Forms.ImageList(this.components);
             this.borderCaptionPanel.SuspendLayout();
             this.leftPanel.SuspendLayout();
             this.contextMenuForTrees.SuspendLayout();
             this.rightPanel.SuspendLayout();
             this.centerPanel.SuspendLayout();
-            this.bottomInfoPanel.SuspendLayout();
             this.panelForFilesCount.SuspendLayout();
+            this.bottomInfoPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // iconsList
@@ -391,6 +392,31 @@ namespace PhotoTransfer
             this.centerPanel.Size = new System.Drawing.Size(792, 683);
             this.centerPanel.TabIndex = 0;
             // 
+            // panelForFilesCount
+            // 
+            this.panelForFilesCount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelForFilesCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.panelForFilesCount.Controls.Add(this.label1);
+            this.panelForFilesCount.ForeColor = System.Drawing.SystemColors.Control;
+            this.panelForFilesCount.Location = new System.Drawing.Point(0, 657);
+            this.panelForFilesCount.Margin = new System.Windows.Forms.Padding(0);
+            this.panelForFilesCount.Name = "panelForFilesCount";
+            this.panelForFilesCount.Size = new System.Drawing.Size(440, 58);
+            this.panelForFilesCount.TabIndex = 1;
+            // 
+            // label1
+            // 
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Font = new System.Drawing.Font("Microsoft JhengHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.SystemColors.Control;
+            this.label1.Location = new System.Drawing.Point(2, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(435, 25);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "In 0200D850 folder finded 50000 files";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
             // buttonForMove
             // 
             this.buttonForMove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -438,6 +464,19 @@ namespace PhotoTransfer
             this.buttonForCopy.Click += new System.EventHandler(this.buttonForCopy_Click);
             this.buttonForCopy.MouseEnter += new System.EventHandler(this.buttonForCopy_MouseEnter);
             this.buttonForCopy.MouseLeave += new System.EventHandler(this.buttonForCopy_MouseLeave);
+            // 
+            // progressTransfer
+            // 
+            this.progressTransfer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressTransfer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.progressTransfer.ForeColor = System.Drawing.Color.Red;
+            this.progressTransfer.Location = new System.Drawing.Point(0, 648);
+            this.progressTransfer.Margin = new System.Windows.Forms.Padding(0);
+            this.progressTransfer.Name = "progressTransfer";
+            this.progressTransfer.Size = new System.Drawing.Size(792, 5);
+            this.progressTransfer.Step = 1;
+            this.progressTransfer.TabIndex = 0;
             // 
             // listView1
             // 
@@ -526,20 +565,6 @@ namespace PhotoTransfer
             this.bottomInfoPanel.Size = new System.Drawing.Size(1200, 32);
             this.bottomInfoPanel.TabIndex = 0;
             // 
-            // progressTransfer
-            // 
-            this.progressTransfer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressTransfer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.progressTransfer.ForeColor = System.Drawing.Color.Red;
-            this.progressTransfer.Location = new System.Drawing.Point(0, 648);
-            this.progressTransfer.Margin = new System.Windows.Forms.Padding(0);
-            this.progressTransfer.Name = "progressTransfer";
-            this.progressTransfer.Size = new System.Drawing.Size(792, 5);
-            this.progressTransfer.Step = 1;
-            this.progressTransfer.TabIndex = 0;
-            this.progressTransfer.Visible = false;
-            // 
             // splitter1
             // 
             this.splitter1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
@@ -551,30 +576,13 @@ namespace PhotoTransfer
             this.splitter1.TabIndex = 1;
             this.splitter1.TabStop = false;
             // 
-            // panelForFilesCount
+            // backgroundCopyMove
             // 
-            this.panelForFilesCount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelForFilesCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.panelForFilesCount.Controls.Add(this.label1);
-            this.panelForFilesCount.ForeColor = System.Drawing.SystemColors.Control;
-            this.panelForFilesCount.Location = new System.Drawing.Point(0, 657);
-            this.panelForFilesCount.Margin = new System.Windows.Forms.Padding(0);
-            this.panelForFilesCount.Name = "panelForFilesCount";
-            this.panelForFilesCount.Size = new System.Drawing.Size(440, 58);
-            this.panelForFilesCount.TabIndex = 1;
-            // 
-            // label1
-            // 
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Microsoft JhengHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.Control;
-            this.label1.Location = new System.Drawing.Point(2, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(435, 25);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "In 0200D850 folder finded 50000 files";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.backgroundCopyMove.WorkerReportsProgress = true;
+            this.backgroundCopyMove.WorkerSupportsCancellation = true;
+            this.backgroundCopyMove.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundCopyMove_DoWork);
+            this.backgroundCopyMove.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundCopyMove_ProgressChanged);
+            this.backgroundCopyMove.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundCopyMove_RunWorkerCompleted);
             // 
             // frmMain
             // 
@@ -601,8 +609,8 @@ namespace PhotoTransfer
             this.contextMenuForTrees.ResumeLayout(false);
             this.rightPanel.ResumeLayout(false);
             this.centerPanel.ResumeLayout(false);
-            this.bottomInfoPanel.ResumeLayout(false);
             this.panelForFilesCount.ResumeLayout(false);
+            this.bottomInfoPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -642,6 +650,7 @@ namespace PhotoTransfer
         private System.Windows.Forms.ProgressBar progressTransfer;
         private System.Windows.Forms.Panel panelForFilesCount;
         private System.Windows.Forms.Label label1;
+        private System.ComponentModel.BackgroundWorker backgroundCopyMove;
     }
 }
 

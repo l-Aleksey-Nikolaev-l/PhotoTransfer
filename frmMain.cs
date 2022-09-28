@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PhotoTransfer
@@ -16,9 +15,17 @@ namespace PhotoTransfer
         private int borderSide = 12; // Variable for WndProc()
         private int paddingSize = 4; // Variable for WindowStateFunction() and WndProc()
         private int filesCount = 0; // Count of validation files
+        private int transferedFilesCount = 0; // Count of transfered files
         private bool diskSpaceLeft = false;
         private bool diskSpaceRight = false;
-        private bool isCopy = true;
+        private bool isLeftTreeView = true;
+
+        string sourceFolderPath = ""; // For example: F/Nikon/0200D850
+        string destinationFolderPath = ""; // For example: E:/Archive
+        string fileExtension; // Variable for get file extention (.jpg, .exe, ...)
+        string extentions = @".dng|.DNG|.fff|.FFF|.jpg|.JPG|.JPEG|.jpeg|.nef|.NEF|.png|.PNG|.raw|.RAW|.tif|.tiff|.TIF|.TIFF|.mp4|.mov|.wma|.avi|.MP4|.MOV|.WMA|.AVI"; // Pattern with extentions
+
+
 
         TreeView selectedTreeView; // Variable for selected TreeView
         TreeView PrevLeftTreeView = null;
@@ -211,6 +218,7 @@ namespace PhotoTransfer
 
             selectedTreeView.SelectedNode.BackColor = Color.FromArgb(120, 120, 120);
             selectedTreeView.SelectedNode.ForeColor = Color.White;
+            isLeftTreeView = true;
             ShowContent();
             FilesFinded();
         }
@@ -239,6 +247,7 @@ namespace PhotoTransfer
         {
             selectedTreeView = LeftTreeView;
             selectedTreeView.Focus();
+            isLeftTreeView = true;
             ShowContent();
             FilesFinded();
         }
@@ -266,13 +275,13 @@ namespace PhotoTransfer
 
             selectedTreeView.SelectedNode.BackColor = Color.FromArgb(120, 120, 120);
             selectedTreeView.SelectedNode.ForeColor = Color.White;
+            isLeftTreeView = false;
             ShowContent();
         }
 
         private void RightTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             selectedTreeView = e.Node.TreeView;
-            
         }
 
         private void RightTreeView_BeforeExpand(object sender, TreeViewCancelEventArgs e)
@@ -294,6 +303,7 @@ namespace PhotoTransfer
         {
             selectedTreeView = RightTreeView;
             selectedTreeView.Focus();
+            isLeftTreeView = false;
             ShowContent();
         }
 
@@ -398,6 +408,10 @@ namespace PhotoTransfer
             else
             {
                 label1.Text = "In (" + folderWithFiles + ") folder files not founded";
+            }
+            if (transferedFilesCount > 0)
+            {
+                label1.Text += " / " + transferedFilesCount;
             }
         }
 
@@ -510,7 +524,11 @@ namespace PhotoTransfer
 
             listView1.Clear();
 
-            filesCount = 0;
+            if (isLeftTreeView == true)
+            {
+                filesCount = 0;
+            }
+
             int listCount = 0;
             string path = selectedTreeView.SelectedNode.FullPath;
             string extension;
@@ -544,14 +562,14 @@ namespace PhotoTransfer
                     case ".DNG":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 0);
                         listView1.Items[listCount].Group = listView1.Groups[1];
-                        filesCount++;
+                        FilesCount();
                         break;
 
                     case ".fff":
                     case ".FFF":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 1);
                         listView1.Items[listCount].Group = listView1.Groups[1];
-                        filesCount++;
+                        FilesCount();
                         break;
 
                     case ".jpg":
@@ -560,28 +578,28 @@ namespace PhotoTransfer
                     case ".jpeg":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 4);
                         listView1.Items[listCount].Group = listView1.Groups[1];
-                        filesCount++;
+                        FilesCount();
                         break;
 
                     case ".nef":
                     case ".NEF":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 5);
                         listView1.Items[listCount].Group = listView1.Groups[1];
-                        filesCount++;
+                        FilesCount();
                         break;
 
                     case ".png":
                     case ".PNG":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 6);
                         listView1.Items[listCount].Group = listView1.Groups[1];
-                        filesCount++;
+                        FilesCount();
                         break;
 
                     case ".raw":
                     case ".RAW":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 7);
                         listView1.Items[listCount].Group = listView1.Groups[1];
-                        filesCount++;
+                        FilesCount();
                         break;
 
                     case ".tif":
@@ -590,7 +608,7 @@ namespace PhotoTransfer
                     case ".TIFF":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 8);
                         listView1.Items[listCount].Group = listView1.Groups[1];
-                        filesCount++;
+                        FilesCount();
                         break;
 
                     case ".mp4":
@@ -603,7 +621,7 @@ namespace PhotoTransfer
                     case ".AVI":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 9);
                         listView1.Items[listCount].Group = listView1.Groups[1];
-                        filesCount++;
+                        FilesCount();
                         break;
 
                     default:
@@ -614,6 +632,13 @@ namespace PhotoTransfer
             listView1.EndUpdate();
         }
 
+        private void FilesCount()
+        {
+            if (isLeftTreeView == true)
+            {
+                filesCount++;
+            }
+        }
 
         //########################################################################################################################################
         //########################################################################################################################################
@@ -641,73 +666,126 @@ namespace PhotoTransfer
             bottomInfoPanel.BackColor = Color.FromArgb(30, 30, 30);
         }
 
-        async private void buttonForCopy_Click(object sender, EventArgs e)
+        private void buttonForCopy_Click(object sender, EventArgs e)
         {
-            //buttonForCopy.Enabled = false;
-            //buttonForMove.Enabled = false;
-            //progressTransfer.Visible = true;
-            //await Task.Delay(100);
-            //bottomInfoPanel.BackColor = Color.Teal;
-            //await Task.Delay(100);
-            //progressTransfer.Value = 99;
-            isCopy = true;
-            CheckCopyAllFiles();
+            BlockControls(LeftTreeView);
+            BlockControls(RightTreeView);
+
+            backgroundCopyMove.RunWorkerAsync();
         }
 
-        async private void buttonForMove_Click(object sender, EventArgs e)
+        private void buttonForMove_Click(object sender, EventArgs e)
         {
-            //buttonForCopy.Enabled = false;
-            //buttonForMove.Enabled = false;
-            //progressTransfer.Visible = true;
-            //await Task.Delay(100);
-            //bottomInfoPanel.BackColor = Color.DarkGoldenrod;
-            //await Task.Delay(100);
-            //progressTransfer.Value = 99;
-            isCopy = false;
-            CheckCopyAllFiles();
+            BlockControls(LeftTreeView);
+            BlockControls(RightTreeView);
         }
 
+
+        private void BlockControls(TreeView sourceTreeView)
+        {
+            sourceTreeView.Enabled = false;
+            btnClose.Enabled = false;
+            buttonForCopy.Enabled = false;
+            buttonForMove.Enabled = false;
+
+            foreach (TreeNode TN in sourceTreeView.Nodes)
+            {
+                TN.BackColor = Color.FromArgb(100, 100, 100);
+                ReColorNodes(TN);
+            }
+            sourceTreeView.SelectedNode.BackColor = Color.FromArgb(120, 120, 120);
+        }
+
+        private void ReColorNodes(TreeNode OTN)
+        {
+            foreach (TreeNode TN in OTN.Nodes)
+            {
+                TN.BackColor = Color.FromArgb(100, 100, 100);
+                ReColorNodes(TN);
+            }
+        }
 
         private void CheckCopyAllFiles()
         {
             // 2018 / 07 July / 24
 
-            string sourceFolderPath = LeftTreeView.SelectedNode.FullPath; // For example: F/Nikon/0200D850
-            string destinationFolderPath = RightTreeView.SelectedNode.FullPath; // For example: E:/Archive
+            Regex regexPattern = new Regex(extentions); // Regex pattern
+            FileInfo courceFileInfo; // Variable for get file information (Modification date, tags, ...)
 
-            string fileExtension;
-            string extentions = @".JPG|.NEF|.AVI";
-            Regex rx = new Regex(extentions);
-            FileInfo courceFileInfo;
-
-            if (Path.GetFileName(destinationFolderPath) != "Archive")
+            foreach (string checkFile in Directory.GetFileSystemEntries(sourceFolderPath, "*", SearchOption.TopDirectoryOnly)) // Find all files in current folder
             {
-                MessageBox.Show("Archive NOT created!");
-                return;
-            }
+                courceFileInfo = new FileInfo(checkFile); // Get all information about selected file
+                fileExtension = courceFileInfo.Extension; // Get file extension (.jpg, .exe, ...)
 
-            foreach (string checkFile in Directory.GetFileSystemEntries(sourceFolderPath, "*", SearchOption.TopDirectoryOnly))
-            {
-                courceFileInfo = new FileInfo(checkFile);
-                fileExtension = courceFileInfo.Extension;
-
-                if (rx.IsMatch(checkFile) == true)
+                if (regexPattern.IsMatch(checkFile) == true) // If file extension = extension from pattern
                 {
-                    CopyFile(destinationFolderPath, courceFileInfo);
+                    CopyMoveFile(destinationFolderPath, courceFileInfo); // Go to CopyMoveFile function with destination folder path and information about selected file
                 }
-                else
+                else // If file extension != extension from pattern
                 {
-                    continue;
+                    continue; // Select next file
                 }
             }
         }
 
-        private void CopyFile(string pathTo, FileInfo checkedFileInfo)
+        private void CopyMoveFile(string pathTo, FileInfo checkedFileInfo)
         {
+            DateTime origrnalDataTime = checkedFileInfo.LastWriteTime;
             int fileDay = checkedFileInfo.LastWriteTime.Day; // Get DAY of file modified
-            int fileMonth = checkedFileInfo.LastWriteTime.Month; // Get MONTH of file modified
+            string fileMonth = checkedFileInfo.LastWriteTime.Month.ToString(); // Get MONTH of file modified
             int fileYear = checkedFileInfo.LastWriteTime.Year; // Get YEAR of file modified
-            string newFilePath = pathTo + "//" + fileYear + "//" + fileMonth + "//" + fileDay + "//" + checkedFileInfo.Name; // New path for file with file name
+            
+            switch (fileMonth) // Rename month number to number with name - 01 January, 02 February, 03 March ...
+            {
+                case "1":
+                    fileMonth = "01 January";
+                    break;
+
+                case "2":
+                    fileMonth = "02 February";
+                    break;
+
+                case "3":
+                    fileMonth = "03 March";
+                    break;
+
+                case "4":
+                    fileMonth = "04 April";
+                    break;
+
+                case "5":
+                    fileMonth = "05 May";
+                    break;
+
+                case "6":
+                    fileMonth = "06 June";
+                    break;
+
+                case "7":
+                    fileMonth = "07 July";
+                    break;
+
+                case "8":
+                    fileMonth = "08 August";
+                    break;
+
+                case "9":
+                    fileMonth = "09 September";
+                    break;
+
+                case "10":
+                    fileMonth = "10 October";
+                    break;
+
+                case "11":
+                    fileMonth = "11 November";
+                    break;
+
+                case "12":
+                    fileMonth = "12 December";
+                    break;
+            }
+
             string existsPath = pathTo + "//" + fileYear + "//" + fileMonth + "//" + fileDay; // Variable for check path
 
             if (Directory.Exists(existsPath) == false) // Directory is EXISTS?
@@ -715,14 +793,85 @@ namespace PhotoTransfer
                 Directory.CreateDirectory(existsPath); // Create directories
             }
 
-            if(isCopy == true) // If pressed COPY button
+            if(File.Exists(existsPath + "//" + checkedFileInfo.Name))  // File is EXISTS?
             {
-                File.Copy(checkedFileInfo.FullName, newFilePath); // COPY validated file from old folder to new folder
+                MessageBox.Show("File exists");
+                return;
             }
-            else // If pressed MOVE button
+
+            FileStream fileSource = new FileStream(checkedFileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
+            FileStream fileDestination = new FileStream(existsPath + "//" + checkedFileInfo.Name, FileMode.Create);
+
+            byte[] bt = new byte[1048576]; // 1Mb = 1048576 Bytes in Binary (not in decimal SI)
+            int readByte;
+                
+            while((readByte = fileSource.Read(bt, 0, bt.Length)) > 0)
             {
-                File.Move(checkedFileInfo.FullName, newFilePath); // MOVE validated file from old folder to new folder
+                fileDestination.Write(bt, 0, readByte);
+                backgroundCopyMove.ReportProgress((int)(fileSource.Position * 100 / fileSource.Length));
             }
+
+            fileSource.Close();
+            fileDestination.Close();
+            File.SetCreationTime(existsPath + "//" + checkedFileInfo.Name, origrnalDataTime); // Restore origrnal Create Date of file
+            File.SetLastWriteTime(existsPath + "//" + checkedFileInfo.Name, origrnalDataTime); // Restore origrnal Modified Date of file
+        }
+
+
+        private void backgroundCopyMove_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            sourceFolderPath = LeftTreeView.SelectedNode.FullPath; // For example: F/Nikon/0200D850
+            destinationFolderPath = RightTreeView.SelectedNode.FullPath; // For example: E:/Archive
+
+            if (Path.GetFileName(destinationFolderPath) != "Archive") // Destination folder name is Archve?
+            {
+                MessageBox.Show("Archive folder NOT selected!", "Hmmm...", 0, MessageBoxIcon.Stop);
+                backgroundCopyMove.CancelAsync();
+                e.Cancel = true;
+                return;
+            }
+
+            CheckCopyAllFiles();
+            backgroundCopyMove.CancelAsync();
+            e.Cancel = true;
+        }
+
+        private void backgroundCopyMove_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            progressTransfer.Value = e.ProgressPercentage;
+            if(progressTransfer.Value == 100)
+            {
+                progressTransfer.Value = 0;
+                transferedFilesCount++;
+                FilesFinded();
+            }
+        }
+
+        private void backgroundCopyMove_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            MessageBox.Show("Done! Transfered " + transferedFilesCount + " files!");
+            btnClose.Enabled = true;
+            buttonForCopy.Enabled = true;
+            buttonForMove.Enabled = true;
+            LeftTreeView.Enabled = true;
+            RightTreeView.Enabled = true;
+            transferedFilesCount = 0;
+
+
+            allDirectorys.ShowDirectorys(RightTreeView);
+            CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight);
+            RightTreeView.Focus();
+            ShowContent();
+
+
+            allDirectorys.ShowDirectorys(LeftTreeView);
+            CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft);
+            LeftTreeView.Focus();
+            ShowContent();
+
+
+            selectedTreeView.Focus();
+            FilesFinded();
         }
     }
 }
