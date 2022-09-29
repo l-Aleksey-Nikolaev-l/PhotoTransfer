@@ -52,6 +52,7 @@ namespace PhotoTransfer
 //########################################################################################################################################
 //########################################################################################################################################
 
+
         public void RefreshDirectorys(Control mainForm) // Refresh directirys in parent node
         {
             var AllTreeView = GetControl(mainForm, typeof(TreeView)); // Get all TreeView's from main form

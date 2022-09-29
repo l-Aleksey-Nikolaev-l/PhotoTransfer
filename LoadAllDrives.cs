@@ -14,7 +14,7 @@ namespace PhotoTransfer
 
                 if (driveInfo.DriveType == DriveType.CDRom && driveInfo.IsReady) // If it is CD-Rom and it is ready
                 {
-                    drivesCount = TreeIcons(sourceTreeView, driveInfo, drivesCount, 2); // drivesCount get number from TreeIcons() and index icon 0 from iconsList
+                    drivesCount = TreeIcons(sourceTreeView, driveInfo, drivesCount, 2); // drivesCount get number from TreeIcons() and index icon 2 from iconsList
                 }
                 else if (driveInfo.DriveType == DriveType.Fixed && driveInfo.Name == @"C:\") // If it is HDD and it is drive C:\
                 {
