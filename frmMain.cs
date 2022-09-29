@@ -212,7 +212,7 @@ namespace PhotoTransfer
         {
             selectedTreeView = e.Node.TreeView;
             allDirectorys.ShowDirectorys(selectedTreeView);
-            CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft);
+            CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft, selectedTreeView);
 
             selectedTreeView.SelectedNode.BackColor = Color.FromArgb(120, 120, 120);
             selectedTreeView.SelectedNode.ForeColor = Color.White;
@@ -270,7 +270,7 @@ namespace PhotoTransfer
         {
             selectedTreeView = e.Node.TreeView;
             allDirectorys.ShowDirectorys(selectedTreeView);
-            CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight);
+            CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight, selectedTreeView);
 
             selectedTreeView.SelectedNode.BackColor = Color.FromArgb(120, 120, 120);
             selectedTreeView.SelectedNode.ForeColor = Color.White;
@@ -615,33 +615,29 @@ namespace PhotoTransfer
         private void LeftFreeSpaceLabel_Click(object sender, EventArgs e)
         {
             if (diskSpaceLeft == false) diskSpaceLeft = true; else diskSpaceLeft = false;
-            selectedTreeView = new TreeView();
-            selectedTreeView = LeftTreeView;
-            CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft);
+            CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft, LeftTreeView);
         }
 
         private void RightFreeSpaceLabel_Click(object sender, EventArgs e)
         {
             if (diskSpaceRight == false) diskSpaceRight = true; else diskSpaceRight = false;
-            selectedTreeView = new TreeView();
-            selectedTreeView = RightTreeView;
-            CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight);
+            CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight, RightTreeView);
         }
 
-        private void CalculateFreeSpace(Label label, bool diskSpace)
+        private void CalculateFreeSpace(Label label, bool diskSpace, TreeView treeView)
         {
             if (diskSpace == true)
             {
-                DriveInfo totalSpace = new DriveInfo(selectedTreeView.SelectedNode.FullPath);
-                Double space = totalSpace.TotalSize;
+                DriveInfo totalSpace = new DriveInfo(treeView.SelectedNode.FullPath);
+                double space = totalSpace.TotalSize;
                 space /= Math.Pow(1024, 3);
                 space = Math.Round(space, 2);
                 label.Text = "Total space: " + space.ToString() + " Gb";
             }
             else
             {
-                DriveInfo freeSpace = new DriveInfo(selectedTreeView.SelectedNode.FullPath);
-                Double space = freeSpace.AvailableFreeSpace;
+                DriveInfo freeSpace = new DriveInfo(treeView.SelectedNode.FullPath);
+                double space = freeSpace.AvailableFreeSpace;
                 space /= Math.Pow(1024, 3);
                 space = Math.Round(space, 2);
                 label.Text = "Free space: " + space.ToString() + " Gb";
@@ -730,8 +726,8 @@ namespace PhotoTransfer
             {
                 GeneralProgressTransfer.Maximum = filesCount;
                 GeneralProgressTransfer.Value = ++transferedFilesCount; // Show general transfer progress
-                CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft); // Update left label with free space
-                CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight); // Update right label with free space
+                CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft, LeftTreeView); // Update left label with free space
+                CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight, RightTreeView); // Update right label with free space
                 FilesFinded(); // Update label with finded files
             }
         }
@@ -766,11 +762,11 @@ namespace PhotoTransfer
 
 
             allDirectorys.ShowDirectorys(RightTreeView); // Update directorys for RightTreeView
-            CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight); // Update right label with free space
+            CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight, RightTreeView); // Update right label with free space
 
 
             allDirectorys.ShowDirectorys(LeftTreeView); // Update directorys for LeftTreeView
-            CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft); // Update left label with free space
+            CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft, LeftTreeView); // Update left label with free space
 
 
             selectedTreeView.Focus(); // Focus on last selected treeView 
@@ -857,7 +853,7 @@ namespace PhotoTransfer
             FileStream fileSource = new FileStream(checkedFileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
             FileStream fileDestination = new FileStream(existsPath + "//" + checkedFileInfo.Name, FileMode.Create);
 
-            byte[] bt = new byte[4096]; // 1Mb = 1048576 Bytes in Binary (not in decimal SI) / 512KB = 524288 Bytes / 4096 Bytes - is recomendation
+            byte[] bt = new byte[16384]; // 1Mb = 1048576 Bytes in Binary (not in decimal SI) / 512KB = 524288 Bytes / 4096 Bytes - is recomendation
             int readByte;
 
             while ((readByte = fileSource.Read(bt, 0, bt.Length)) > 0)
