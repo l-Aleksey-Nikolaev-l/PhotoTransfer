@@ -16,6 +16,7 @@ namespace PhotoTransfer
         private int paddingSize = 4; // Variable for WindowStateFunction() and WndProc()
         private int filesCount = 0; // Count of validation files
         private int transferedFilesCount = 0; // Count of transfered files
+        private double generalFilesSize = 0; // Size all files for transfer
         private bool diskSpaceLeft = false;
         private bool diskSpaceRight = false;
         private bool isLeftTreeView = true;
@@ -30,8 +31,8 @@ namespace PhotoTransfer
         TreeView PrevLeftTreeView = null;
         TreeView PrevRightTreeView = null;
 
-        LoadAllDrives allDrives = new LoadAllDrives();
-        LoadDirectorys allDirectorys = new LoadDirectorys();
+        LoadAllDrives allDrives = new LoadAllDrives(); // Class for load drives
+        LoadDirectorys allDirectorys = new LoadDirectorys(); // Class for load directorys
         
 
         public frmMain()
@@ -384,7 +385,7 @@ namespace PhotoTransfer
                 filesCount = 0;
             }
 
-            int listCount = 0;
+            int listCount = -1;
             string path = selectedTreeView.SelectedNode.FullPath;
             string extension;
             FileInfo fi;
@@ -405,9 +406,9 @@ namespace PhotoTransfer
 
                 if ((forFolder & FileAttributes.Directory) == FileAttributes.Directory)
                 {
+                    listCount++;
                     listView1.Items.Add(Path.GetFileName(fileInfo), 2);
                     listView1.Items[listCount].Group = listView1.Groups[0];
-                    listCount++;
                     continue;
                 }
 
@@ -416,15 +417,11 @@ namespace PhotoTransfer
                     case ".dng":
                     case ".DNG":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 0);
-                        listView1.Items[listCount].Group = listView1.Groups[1];
-                        FilesCount();
                         break;
 
                     case ".fff":
                     case ".FFF":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 1);
-                        listView1.Items[listCount].Group = listView1.Groups[1];
-                        FilesCount();
                         break;
 
                     case ".jpg":
@@ -432,29 +429,21 @@ namespace PhotoTransfer
                     case ".JPEG":
                     case ".jpeg":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 4);
-                        listView1.Items[listCount].Group = listView1.Groups[1];
-                        FilesCount();
                         break;
 
                     case ".nef":
                     case ".NEF":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 5);
-                        listView1.Items[listCount].Group = listView1.Groups[1];
-                        FilesCount();
                         break;
 
                     case ".png":
                     case ".PNG":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 6);
-                        listView1.Items[listCount].Group = listView1.Groups[1];
-                        FilesCount();
                         break;
 
                     case ".raw":
                     case ".RAW":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 7);
-                        listView1.Items[listCount].Group = listView1.Groups[1];
-                        FilesCount();
                         break;
 
                     case ".tif":
@@ -462,8 +451,6 @@ namespace PhotoTransfer
                     case ".TIF":
                     case ".TIFF":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 8);
-                        listView1.Items[listCount].Group = listView1.Groups[1];
-                        FilesCount();
                         break;
 
                     case ".mp4":
@@ -475,46 +462,55 @@ namespace PhotoTransfer
                     case ".WMA":
                     case ".AVI":
                         listView1.Items.Add(Path.GetFileName(fileInfo), 9);
-                        listView1.Items[listCount].Group = listView1.Groups[1];
-                        FilesCount();
                         break;
 
                     default:
                         continue;
                 }
+
+                if (isLeftTreeView == true)
+                {
+                    filesCount++;
+                }
+
                 listCount++;
+                listView1.Items[listCount].Group = listView1.Groups[1];
+                generalFilesSize += fi.Length;
             }
             listView1.EndUpdate();
-        }
-
-        private void FilesCount()
-        {
-            if (isLeftTreeView == true)
-            {
-                filesCount++;
-
-            }
+            generalFilesSize = Math.Round(((generalFilesSize / 1024) / 1024), 2);
         }
 
         private void FilesFinded()
         {
+
+            if (transferedFilesCount > 0)
+            {
+                label1.Text = filesCount + " / " + transferedFilesCount;
+                return;
+            }
+
             string folderWithFiles = LeftTreeView.SelectedNode.Text;
-            if(filesCount > 0)
+            string unitSize = " Mb";
+
+            if(generalFilesSize > 1000)
             {
-                label1.Text = "In (" + folderWithFiles + ") folder finded " + filesCount + " files";
+                generalFilesSize = Math.Round(generalFilesSize / 1024, 2);
+                unitSize = " Gb";
             }
-            else if(filesCount == 1)
-            {
-                label1.Text = "In (" + folderWithFiles + ") folder finded 1 file";
-            }
-            else
+
+            if (filesCount == 0)
             {
                 label1.Text = "In (" + folderWithFiles + ") folder files not founded";
             }
-            if (transferedFilesCount > 0)
+            else if (filesCount == 1)
             {
-                label1.Text += " / " + transferedFilesCount;
+                label1.Text = "In (" + folderWithFiles + ") folder finded 1 file " + "(" + generalFilesSize + unitSize + ")";
             }
+            else if (filesCount > 1)
+            {
+                label1.Text = "In (" + folderWithFiles + ") folder finded " + filesCount + " files " + "(" + generalFilesSize + unitSize + ")";
+            } 
         }
 
 
@@ -867,5 +863,6 @@ namespace PhotoTransfer
             File.SetCreationTime(existsPath + "//" + checkedFileInfo.Name, origrnalDataTime); // Restore origrnal Create Date of file
             File.SetLastWriteTime(existsPath + "//" + checkedFileInfo.Name, origrnalDataTime); // Restore origrnal Modified Date of file
         }
+
     }
 }
