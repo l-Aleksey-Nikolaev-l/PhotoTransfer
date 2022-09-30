@@ -830,10 +830,16 @@ namespace PhotoTransfer
             int fileMonth = checkedFileInfo.LastWriteTime.Month; // Get MONTH of file modified
             int fileYear = checkedFileInfo.LastWriteTime.Year; // Get YEAR of file modified
 
+            string day = fileDay.ToString();
+            if (fileDay < 10)
+            {
+                day = "0" + fileDay.ToString();
+            }
+
             string[] monthName = {"", "01 January", "02 February", "03 March", "04 April", "05 May", "06 June", "07 July", "08 August", "09 September", "10 October", "11 November", "12 December"}; // Rename month number to number with name - 01 January, 02 February, 03 March ...
             string month = monthName[fileMonth];
 
-            string existsPath = pathTo + "//" + fileYear + "//" + month + "//" + fileDay; // Variable for check path
+            string existsPath = pathTo + "//" + fileYear + "//" + month + "//" + day; // Variable for check path
 
             if (Directory.Exists(existsPath) == false) // Directory is EXISTS?
             {
