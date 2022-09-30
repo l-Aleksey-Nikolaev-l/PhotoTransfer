@@ -15,12 +15,14 @@ namespace PhotoTransfer
         private int borderSide = 12; // Variable for WndProc()
         private int paddingSize = 4; // Variable for WindowStateFunction() and WndProc()
         private int filesCount = 0; // Count of validation files
+        private int copiesCount = 0; // Count for calculating copies (if file EXISTS then ++)
         private int transferedFilesCount = 0; // Count of transfered files
         private double generalFilesSize = 0; // Size all files for transfer
         private bool diskSpaceLeft = false;
         private bool diskSpaceRight = false;
         private bool isLeftTreeView = true;
         private bool isMove = false; // Pressed MOVE or COPY button?
+        private bool isCopy = false; // This is file is it copy or no?
 
         string sourceFolderPath = ""; // For example: F/Nikon/0200D850
         string destinationFolderPath = ""; // For example: E:/Archive
@@ -743,6 +745,11 @@ namespace PhotoTransfer
 
             MessageBox.Show("Done! " + msg + transferedFilesCount + " files!"); // Message after end all processes coping
 
+            if (copiesCount > 0)
+            {
+                MessageBox.Show("Attantion!" + "\n" + "In SOURSE folder - " + copiesCount + " file(s) is COPIES." + "\n" + "Check them!", "NOT transfered " + copiesCount + " files", 0, MessageBoxIcon.Exclamation);
+            }
+
             btnClose.Enabled = true;
             buttonForCopy.Enabled = true;
             buttonForMove.Enabled = true;
@@ -755,6 +762,7 @@ namespace PhotoTransfer
             GeneralProgressTransfer.Value = 0; // Reset value for GeneralProgressTransfer
             ProgressTransfer.Value = 0; // Reset value for ProgressTransfer
             transferedFilesCount = 0; // Reset value for transferedFilesCount
+            copiesCount = 0; // Reset value for copies
 
 
             allDirectorys.ShowDirectorys(RightTreeView); // Update directorys for RightTreeView
@@ -815,7 +823,7 @@ namespace PhotoTransfer
                     continue; // Select next file
                 }
 
-                if (isMove == true) // If pressed MOVE TO button
+                if (isMove == true & isCopy == false) // If pressed MOVE TO button
                 {
                     File.Delete(sourceFileInfo.FullName); // Delete file from source directory
                 }
@@ -831,6 +839,7 @@ namespace PhotoTransfer
             int fileYear = checkedFileInfo.LastWriteTime.Year; // Get YEAR of file modified
 
             string day = fileDay.ToString();
+
             if (fileDay < 10)
             {
                 day = "0" + fileDay.ToString();
@@ -846,9 +855,23 @@ namespace PhotoTransfer
                 Directory.CreateDirectory(existsPath); // Create directories
             }
 
+            isCopy = false; // Flag before checking EXISTS
+
             if (File.Exists(existsPath + "//" + checkedFileInfo.Name))  // File is EXISTS?
             {
-                MessageBox.Show("File exists");
+                isCopy = true;
+                copiesCount++;
+
+                if (Directory.Exists(checkedFileInfo.DirectoryName + "//" + "_COPIES") == false) // Directory for COPIES is EXISTS?
+                {
+                    Directory.CreateDirectory(checkedFileInfo.DirectoryName + "//" + "_COPIES"); // Create directories
+                }
+
+                checkedFileInfo.MoveTo(checkedFileInfo.DirectoryName + "//" + "_COPIES" + "//" + checkedFileInfo.Name); // Move copy file to _COPIES folder in source directory
+                
+                CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft, LeftTreeView); // Update left label with free space
+                CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight, RightTreeView); // Update right label with free space
+                FilesFinded(); // Update label with finded files
                 return;
             }
 
