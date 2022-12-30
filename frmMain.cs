@@ -651,12 +651,12 @@ namespace PhotoTransfer
 
         private void buttonForCopy_MouseEnter(object sender, EventArgs e)
         {
-            bottomInfoPanel.BackColor = Color.Teal;
+            bottomInfoPanel.BackColor = Color.FromArgb(103, 148, 54);
         }
 
         private void buttonForCopy_MouseLeave(object sender, EventArgs e)
         {
-            bottomInfoPanel.BackColor = Color.FromArgb(30, 30, 30);
+            bottomInfoPanel.BackColor = Color.FromArgb(5, 102, 141);
         }
 
         private void buttonForCopy_Click(object sender, EventArgs e)
@@ -672,7 +672,7 @@ namespace PhotoTransfer
 
         private void buttonForMove_MouseLeave(object sender, EventArgs e)
         {
-            bottomInfoPanel.BackColor = Color.FromArgb(30, 30, 30);
+            bottomInfoPanel.BackColor = Color.FromArgb(5, 102, 141);
         }
 
         private void buttonForMove_Click(object sender, EventArgs e)

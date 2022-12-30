@@ -32,8 +32,8 @@ namespace PhotoTransfer
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ImageList iconsList;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("GroupForFolders", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("GroupForFiles", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("GroupForFolders", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("GroupForFiles", System.Windows.Forms.HorizontalAlignment.Left);
             this.borderCaptionPanel = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnMinimaze = new System.Windows.Forms.Button();
@@ -58,13 +58,13 @@ namespace PhotoTransfer
             this.rightSplitter = new System.Windows.Forms.Splitter();
             this.centerPanel = new System.Windows.Forms.Panel();
             this.panelForFilesCount = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
             this.buttonForMove = new System.Windows.Forms.Button();
             this.buttonForCopy = new System.Windows.Forms.Button();
             this.ProgressTransfer = new System.Windows.Forms.ProgressBar();
             this.GeneralProgressTransfer = new System.Windows.Forms.ProgressBar();
             this.listView1 = new System.Windows.Forms.ListView();
             this.iconsForFiles = new System.Windows.Forms.ImageList(this.components);
+            this.label1 = new System.Windows.Forms.Label();
             this.LeftFreeSpaceLabel = new System.Windows.Forms.Label();
             this.RightFreeSpaceLabel = new System.Windows.Forms.Label();
             this.bottomInfoPanel = new System.Windows.Forms.Panel();
@@ -97,7 +97,7 @@ namespace PhotoTransfer
             // 
             // borderCaptionPanel
             // 
-            this.borderCaptionPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.borderCaptionPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(102)))), ((int)(((byte)(141)))));
             this.borderCaptionPanel.Controls.Add(this.pictureBox1);
             this.borderCaptionPanel.Controls.Add(this.btnMinimaze);
             this.borderCaptionPanel.Controls.Add(this.btnMaxNorm);
@@ -126,7 +126,7 @@ namespace PhotoTransfer
             // btnMinimaze
             // 
             this.btnMinimaze.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMinimaze.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.btnMinimaze.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(102)))), ((int)(((byte)(141)))));
             this.btnMinimaze.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnMinimaze.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.btnMinimaze.FlatAppearance.BorderSize = 0;
@@ -148,7 +148,7 @@ namespace PhotoTransfer
             // btnMaxNorm
             // 
             this.btnMaxNorm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMaxNorm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.btnMaxNorm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(102)))), ((int)(((byte)(141)))));
             this.btnMaxNorm.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnMaxNorm.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnMaxNorm.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
@@ -172,7 +172,7 @@ namespace PhotoTransfer
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.btnClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(102)))), ((int)(((byte)(141)))));
             this.btnClose.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnClose.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.btnClose.FlatAppearance.BorderSize = 0;
@@ -206,12 +206,12 @@ namespace PhotoTransfer
             // 
             // LeftTreeView
             // 
-            this.LeftTreeView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.LeftTreeView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(122)))), ((int)(((byte)(161)))));
             this.LeftTreeView.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.LeftTreeView.ContextMenuStrip = this.contextMenuForTrees;
             this.LeftTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LeftTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.LeftTreeView.ForeColor = System.Drawing.SystemColors.Control;
+            this.LeftTreeView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
             this.LeftTreeView.FullRowSelect = true;
             this.LeftTreeView.ImageKey = "Folder Close.png";
             this.LeftTreeView.ImageList = iconsList;
@@ -305,10 +305,10 @@ namespace PhotoTransfer
             // 
             // leftTreeLabel
             // 
-            this.leftTreeLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.leftTreeLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(122)))), ((int)(((byte)(161)))));
             this.leftTreeLabel.Dock = System.Windows.Forms.DockStyle.Top;
             this.leftTreeLabel.Font = new System.Drawing.Font("Microsoft JhengHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.leftTreeLabel.ForeColor = System.Drawing.SystemColors.Control;
+            this.leftTreeLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
             this.leftTreeLabel.Location = new System.Drawing.Point(0, 0);
             this.leftTreeLabel.Name = "leftTreeLabel";
             this.leftTreeLabel.Size = new System.Drawing.Size(200, 25);
@@ -318,7 +318,7 @@ namespace PhotoTransfer
             // 
             // leftSplitter
             // 
-            this.leftSplitter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.leftSplitter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(102)))), ((int)(((byte)(141)))));
             this.leftSplitter.Location = new System.Drawing.Point(200, 35);
             this.leftSplitter.Name = "leftSplitter";
             this.leftSplitter.Size = new System.Drawing.Size(4, 683);
@@ -340,12 +340,12 @@ namespace PhotoTransfer
             // 
             // RightTreeView
             // 
-            this.RightTreeView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.RightTreeView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(122)))), ((int)(((byte)(161)))));
             this.RightTreeView.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.RightTreeView.ContextMenuStrip = this.contextMenuForTrees;
             this.RightTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RightTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.RightTreeView.ForeColor = System.Drawing.SystemColors.Control;
+            this.RightTreeView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
             this.RightTreeView.FullRowSelect = true;
             this.RightTreeView.ImageKey = "Folder Close.png";
             this.RightTreeView.ImageList = iconsList;
@@ -372,10 +372,10 @@ namespace PhotoTransfer
             // 
             // rightTreeLabel
             // 
-            this.rightTreeLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.rightTreeLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(122)))), ((int)(((byte)(161)))));
             this.rightTreeLabel.Dock = System.Windows.Forms.DockStyle.Top;
             this.rightTreeLabel.Font = new System.Drawing.Font("Microsoft JhengHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rightTreeLabel.ForeColor = System.Drawing.SystemColors.Control;
+            this.rightTreeLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
             this.rightTreeLabel.Location = new System.Drawing.Point(0, 0);
             this.rightTreeLabel.Name = "rightTreeLabel";
             this.rightTreeLabel.Size = new System.Drawing.Size(200, 25);
@@ -385,7 +385,7 @@ namespace PhotoTransfer
             // 
             // rightSplitter
             // 
-            this.rightSplitter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.rightSplitter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(102)))), ((int)(((byte)(141)))));
             this.rightSplitter.Dock = System.Windows.Forms.DockStyle.Right;
             this.rightSplitter.Location = new System.Drawing.Point(996, 35);
             this.rightSplitter.Name = "rightSplitter";
@@ -395,7 +395,7 @@ namespace PhotoTransfer
             // 
             // centerPanel
             // 
-            this.centerPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.centerPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(102)))), ((int)(((byte)(141)))));
             this.centerPanel.Controls.Add(this.panelForFilesCount);
             this.centerPanel.Controls.Add(this.buttonForMove);
             this.centerPanel.Controls.Add(this.buttonForCopy);
@@ -412,32 +412,18 @@ namespace PhotoTransfer
             // 
             this.panelForFilesCount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelForFilesCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.panelForFilesCount.ForeColor = System.Drawing.SystemColors.Control;
+            this.panelForFilesCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(122)))), ((int)(((byte)(161)))));
+            this.panelForFilesCount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
             this.panelForFilesCount.Location = new System.Drawing.Point(0, 657);
             this.panelForFilesCount.Margin = new System.Windows.Forms.Padding(0);
             this.panelForFilesCount.Name = "panelForFilesCount";
             this.panelForFilesCount.Size = new System.Drawing.Size(440, 58);
             this.panelForFilesCount.TabIndex = 1;
             // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.label1.ForeColor = System.Drawing.SystemColors.Control;
-            this.label1.Location = new System.Drawing.Point(250, 5);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(700, 25);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "In 0200D850 folder finded 50000 files";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // buttonForMove
             // 
             this.buttonForMove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonForMove.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.buttonForMove.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(122)))), ((int)(((byte)(161)))));
             this.buttonForMove.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonForMove.FlatAppearance.BorderColor = System.Drawing.SystemColors.Control;
             this.buttonForMove.FlatAppearance.BorderSize = 0;
@@ -445,7 +431,7 @@ namespace PhotoTransfer
             this.buttonForMove.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkGoldenrod;
             this.buttonForMove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonForMove.Font = new System.Drawing.Font("Microsoft JhengHei UI", 12F);
-            this.buttonForMove.ForeColor = System.Drawing.SystemColors.Control;
+            this.buttonForMove.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
             this.buttonForMove.Location = new System.Drawing.Point(620, 657);
             this.buttonForMove.Margin = new System.Windows.Forms.Padding(0);
             this.buttonForMove.MinimumSize = new System.Drawing.Size(172, 58);
@@ -462,15 +448,15 @@ namespace PhotoTransfer
             // buttonForCopy
             // 
             this.buttonForCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonForCopy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.buttonForCopy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(122)))), ((int)(((byte)(161)))));
             this.buttonForCopy.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonForCopy.FlatAppearance.BorderColor = System.Drawing.SystemColors.Control;
             this.buttonForCopy.FlatAppearance.BorderSize = 0;
-            this.buttonForCopy.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightSeaGreen;
-            this.buttonForCopy.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Teal;
+            this.buttonForCopy.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(190)))), ((int)(((byte)(0)))));
+            this.buttonForCopy.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(148)))), ((int)(((byte)(54)))));
             this.buttonForCopy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonForCopy.Font = new System.Drawing.Font("Microsoft JhengHei UI", 12F);
-            this.buttonForCopy.ForeColor = System.Drawing.SystemColors.Control;
+            this.buttonForCopy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
             this.buttonForCopy.Location = new System.Drawing.Point(444, 657);
             this.buttonForCopy.Margin = new System.Windows.Forms.Padding(0);
             this.buttonForCopy.MinimumSize = new System.Drawing.Size(172, 58);
@@ -517,18 +503,18 @@ namespace PhotoTransfer
             this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.listView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(122)))), ((int)(((byte)(161)))));
             this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listView1.ForeColor = System.Drawing.SystemColors.Control;
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
-            listViewGroup3.Header = "GroupForFolders";
-            listViewGroup3.Name = "GroupForFolders";
-            listViewGroup4.Header = "GroupForFiles";
-            listViewGroup4.Name = "GroupForFiles";
+            listViewGroup1.Header = "GroupForFolders";
+            listViewGroup1.Name = "GroupForFolders";
+            listViewGroup2.Header = "GroupForFiles";
+            listViewGroup2.Name = "GroupForFiles";
             this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup3,
-            listViewGroup4});
+            listViewGroup1,
+            listViewGroup2});
             this.listView1.HideSelection = false;
             this.listView1.LargeImageList = this.iconsForFiles;
             this.listView1.Location = new System.Drawing.Point(0, 0);
@@ -557,12 +543,26 @@ namespace PhotoTransfer
             this.iconsForFiles.Images.SetKeyName(9, "video-file-80.png");
             this.iconsForFiles.Images.SetKeyName(10, "X-grey-80.png");
             // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
+            this.label1.Location = new System.Drawing.Point(250, 5);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(700, 25);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "In 0200D850 folder finded 50000 files";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // LeftFreeSpaceLabel
             // 
             this.LeftFreeSpaceLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.LeftFreeSpaceLabel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.LeftFreeSpaceLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.LeftFreeSpaceLabel.ForeColor = System.Drawing.SystemColors.Control;
+            this.LeftFreeSpaceLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
             this.LeftFreeSpaceLabel.Location = new System.Drawing.Point(6, 4);
             this.LeftFreeSpaceLabel.Margin = new System.Windows.Forms.Padding(0);
             this.LeftFreeSpaceLabel.Name = "LeftFreeSpaceLabel";
@@ -577,7 +577,7 @@ namespace PhotoTransfer
             this.RightFreeSpaceLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.RightFreeSpaceLabel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.RightFreeSpaceLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.RightFreeSpaceLabel.ForeColor = System.Drawing.SystemColors.Control;
+            this.RightFreeSpaceLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
             this.RightFreeSpaceLabel.Location = new System.Drawing.Point(998, 5);
             this.RightFreeSpaceLabel.Margin = new System.Windows.Forms.Padding(0);
             this.RightFreeSpaceLabel.Name = "RightFreeSpaceLabel";
@@ -589,7 +589,7 @@ namespace PhotoTransfer
             // 
             // bottomInfoPanel
             // 
-            this.bottomInfoPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.bottomInfoPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(102)))), ((int)(((byte)(141)))));
             this.bottomInfoPanel.Controls.Add(this.label1);
             this.bottomInfoPanel.Controls.Add(this.splitter1);
             this.bottomInfoPanel.Controls.Add(this.RightFreeSpaceLabel);
@@ -602,7 +602,7 @@ namespace PhotoTransfer
             // 
             // splitter1
             // 
-            this.splitter1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.splitter1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(102)))), ((int)(((byte)(141)))));
             this.splitter1.Cursor = System.Windows.Forms.Cursors.Default;
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Top;
             this.splitter1.Location = new System.Drawing.Point(0, 0);
@@ -624,7 +624,7 @@ namespace PhotoTransfer
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(5)))), ((int)(((byte)(102)))), ((int)(((byte)(141)))));
             this.ClientSize = new System.Drawing.Size(1200, 750);
             this.Controls.Add(this.centerPanel);
             this.Controls.Add(this.rightSplitter);
