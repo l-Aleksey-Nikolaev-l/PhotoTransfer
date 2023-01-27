@@ -11,27 +11,24 @@ namespace PhotoTransfer
 {
     public partial class frmMain : Form
     {
-        private DateTime lastClick = DateTime.Now; // Variable for borderCaptionPanel_MouseDown()
-        private int borderSide = 12; // Variable for WndProc()
-        private int paddingSize = 4; // Variable for WindowStateFunction() and WndProc()
-        private int filesCount = 0; // Count of validation files
-        private int copiesCount = 0; // Count for calculating copies (if file EXISTS then ++)
-        private int transferedFilesCount = 0; // Count of transfered files
-        private double generalFilesSize = 0; // Size all files for transfer
+        private DateTime lastClick = DateTime.Now;
+        private int borderSide = 12;
+        private int paddingSize = 4;
+        private int filesCount = 0;
+        private int copiesCount = 0;
+        private int transferedFilesCount = 0;
+        private double generalFilesSize = 0;
         private bool diskSpaceLeft = false;
         private bool diskSpaceRight = false;
-        private bool isLeftTreeView = true;
-        private bool isMove = false; // Pressed MOVE or COPY button?
-        private bool isCopy = false; // This is file is it copy or no?
+        private bool isMove = false;
+        private bool isCopy = false;
 
         string sourceFolderPath = ""; // For example: F/Nikon/0200D850
         string destinationFolderPath = ""; // For example: E:/Archive
-        string fileExtension; // Variable for get file extention (.jpg, .exe, ...)
-        string extentions = @".dng|.DNG|.fff|.FFF|.jpg|.JPG|.JPEG|.jpeg|.nef|.NEF|.png|.PNG|.raw|.RAW|.tif|.tiff|.TIF|.TIFF|.mp4|.mov|.wma|.avi|.MP4|.MOV|.WMA|.AVI"; // Pattern with extentions
+        string extentions = @".dng|.DNG|.fff|.FFF|.jpg|.JPG|.JPEG|.jpeg|.nef|.NEF|.png|.PNG|.raw|.RAW|.tif|.tiff|.TIF|.TIFF|.mp4|.mov|.wma|.avi|.MP4|.MOV|.WMA|.AVI";
 
-        TreeView selectedTreeView; // Variable for selected TreeView
-        TreeView PrevLeftTreeView = null;
-        TreeView PrevRightTreeView = null;
+        TreeView selectedTreeView;
+        TreeView prevSelectedTreeView;
 
         LoadAllDrives allDrives = new LoadAllDrives(); // Class for load drives
         LoadDirectorys allDirectorys = new LoadDirectorys(); // Class for load directorys
@@ -51,15 +48,15 @@ namespace PhotoTransfer
 
         private void borderCaptionPanel_MouseDown(object sender, MouseEventArgs e) // DoubleClick for Border Caption
         {
-            TimeSpan length = DateTime.Now - lastClick; // Get new time interval
-            TimeSpan interval = new TimeSpan(0, 0, 0, 0, 250); // Time for comparison
+            TimeSpan length = DateTime.Now - lastClick;
+            TimeSpan interval = new TimeSpan(0, 0, 0, 0, 250);
 
-            if (length < interval) // If time less than 250ms
+            if (length < interval)
             {
                 WindowStateFunction();
                 return;
             }
-            lastClick = DateTime.Now; // Get time of the last click in borderCaptionPanel
+            lastClick = DateTime.Now;
 
             ReleaseCapture();
             SendMessage(Handle, 0x112, 0xf012, 0);
@@ -151,17 +148,17 @@ namespace PhotoTransfer
         //########################################################################################################################################
 
 
-        private void btnClose_Click(object sender, EventArgs e) // Button for close app
+        private void btnClose_Click(object sender, EventArgs e)
         {
             Dispose();
         }
 
-        private void btnMaxNorm_Click(object sender, EventArgs e) // Button for normalize and maximize main window
+        private void btnMaxNorm_Click(object sender, EventArgs e)
         {
             WindowStateFunction();
         }
 
-        private void WindowStateFunction() // Function for normalize and maximize main window
+        private void WindowStateFunction()
         {
             if (WindowState == FormWindowState.Normal)
             {
@@ -179,20 +176,17 @@ namespace PhotoTransfer
             }
         }
 
-        private void btnMinimaze_Click(object sender, EventArgs e) // Button for minimize main window
+        private void btnMinimaze_Click(object sender, EventArgs e)
         {
             WindowState = FormWindowState.Minimized;
         }
 
-        private void frmMain_Load(object sender, EventArgs e) // LOAD
+        private void frmMain_Load(object sender, EventArgs e)
         {
             allDrives.GetAllDrives(LeftTreeView);
             allDrives.GetAllDrives(RightTreeView);
             LeftTreeView.SelectedNode = LeftTreeView.TopNode;
             RightTreeView.SelectedNode = RightTreeView.TopNode;
-            PrevLeftTreeView = LeftTreeView;
-            PrevRightTreeView = RightTreeView;
-
         }
 
 
@@ -204,11 +198,10 @@ namespace PhotoTransfer
 
         private void LeftTreeView_BeforeSelect(object sender, TreeViewCancelEventArgs e)
         {
-            if (PrevLeftTreeView != null && PrevLeftTreeView.SelectedNode != null)
+            if (selectedTreeView != null)
             {
-                PrevLeftTreeView.SelectedNode.BackColor = Color.Empty;
+                selectedTreeView.SelectedNode.BackColor = Color.Empty;
             }
-            PrevLeftTreeView = selectedTreeView;
         }
 
         private void LeftTreeView_AfterSelect(object sender, TreeViewEventArgs e)
@@ -216,12 +209,9 @@ namespace PhotoTransfer
             selectedTreeView = e.Node.TreeView;
             allDirectorys.ShowDirectorys(selectedTreeView);
             CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft, selectedTreeView);
-
-            selectedTreeView.SelectedNode.BackColor = Color.FromArgb(120, 120, 120);
-            selectedTreeView.SelectedNode.ForeColor = Color.White;
-            isLeftTreeView = true;
-            ShowContent();
-            FilesFinded();
+            ShowContent(selectedTreeView);
+            FilesFinded(); // Show files in bottom panel
+            SelectedItemColor(selectedTreeView);
         }
 
         private void LeftTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -248,9 +238,8 @@ namespace PhotoTransfer
         {
             selectedTreeView = LeftTreeView;
             selectedTreeView.Focus();
-            isLeftTreeView = true;
-            ShowContent();
-            FilesFinded();
+            ShowContent(selectedTreeView);
+            SelectedItemColor(selectedTreeView);
         }
 
 
@@ -262,11 +251,10 @@ namespace PhotoTransfer
 
         private void RightTreeView_BeforeSelect(object sender, TreeViewCancelEventArgs e)
         {
-            if (PrevRightTreeView != null && PrevRightTreeView.SelectedNode != null)
+            if (selectedTreeView != null)
             {
-                PrevRightTreeView.SelectedNode.BackColor = Color.Empty;
+                selectedTreeView.SelectedNode.BackColor = Color.Empty;
             }
-            PrevRightTreeView = selectedTreeView;
         }
 
         private void RightTreeView_AfterSelect(object sender, TreeViewEventArgs e)
@@ -274,11 +262,8 @@ namespace PhotoTransfer
             selectedTreeView = e.Node.TreeView;
             allDirectorys.ShowDirectorys(selectedTreeView);
             CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight, selectedTreeView);
-
-            selectedTreeView.SelectedNode.BackColor = Color.FromArgb(120, 120, 120);
-            selectedTreeView.SelectedNode.ForeColor = Color.White;
-            isLeftTreeView = false;
-            ShowContent();
+            ShowContent(selectedTreeView);
+            SelectedItemColor(selectedTreeView);
         }
 
         private void RightTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -305,8 +290,8 @@ namespace PhotoTransfer
         {
             selectedTreeView = RightTreeView;
             selectedTreeView.Focus();
-            isLeftTreeView = false;
-            ShowContent();
+            ShowContent(selectedTreeView);
+            SelectedItemColor(selectedTreeView);
         }
 
 
@@ -316,15 +301,15 @@ namespace PhotoTransfer
         //########################################################################################################################################
 
 
-        private void TopNodeIcon(int indexIcon, TreeViewCancelEventArgs e) // Save drives icons
+        private void TopNodeIcon(int indexIcon, TreeViewCancelEventArgs e)
         {
-            if (e.Node.Text.Contains(':') == false) // Change icons for nodes without ":"
+            if (e.Node.Text.Contains(':') == false)
             {
                 e.Node.ImageIndex = indexIcon;
             }
         }
 
-        private void RenameFolder(NodeLabelEditEventArgs e) // Rename selected node and folder
+        private void RenameFolder(NodeLabelEditEventArgs e)
         {
 
             List<string> savedNodes = e.Node.FullPath.Split('/').ToList();
@@ -332,12 +317,12 @@ namespace PhotoTransfer
             savedNodes[savedNodes.Count-1] = e.Label;
             
             string oldFolderName, newFolderName;
-            oldFolderName = e.Node.FullPath; // Get old folder name
-            newFolderName = e.Node.Parent.FullPath + "/" + e.Label; // Get new folder name
-            Directory.Move(oldFolderName, newFolderName); // Rename folder
+            oldFolderName = e.Node.FullPath;
+            newFolderName = e.Node.Parent.FullPath + "/" + e.Label;
+            Directory.Move(oldFolderName, newFolderName);
             selectedTreeView.SelectedNode.Name = e.Label;
             selectedTreeView.SelectedNode.Text = e.Label;
-            selectedTreeView.SelectedNode.EndEdit(false); // Close editing
+            selectedTreeView.SelectedNode.EndEdit(false);
             selectedTreeView.LabelEdit = false;
 
             allDrives.GetAllDrives(selectedTreeView);
@@ -376,13 +361,13 @@ namespace PhotoTransfer
             }
         }
 
-        private void ShowContent()
+        private void ShowContent(TreeView inputTreeView)
         {
             listView1.BeginUpdate();
 
             listView1.Clear();
 
-            if (isLeftTreeView == true)
+            if (inputTreeView == LeftTreeView)
             {
                 filesCount = 0;
             }
@@ -470,7 +455,7 @@ namespace PhotoTransfer
                         continue;
                 }
 
-                if (isLeftTreeView == true)
+                if (inputTreeView == LeftTreeView)
                 {
                     filesCount++;
                 }
@@ -515,6 +500,47 @@ namespace PhotoTransfer
             } 
         }
 
+        private void SelectedItemColor (TreeView activeTree)
+        {
+
+            if (activeTree == LeftTreeView)
+            {
+                prevSelectedTreeView = RightTreeView;
+            } else
+            {
+                prevSelectedTreeView = LeftTreeView;
+            }
+
+            if (prevSelectedTreeView.SelectedNode == null)
+            {
+                return;
+            }
+
+            Color activeColor = new Color();
+            Color nonActiveColor = new Color();
+
+            activeColor = Color.FromArgb(0, 120, 215);
+            nonActiveColor = Color.FromArgb(120, 120, 120);
+
+            prevSelectedTreeView.SelectedNode.BackColor = nonActiveColor;
+            selectedTreeView.SelectedNode.BackColor = activeColor;
+            TreeLabelColor(activeTree, activeColor, nonActiveColor);
+        }
+
+        private void TreeLabelColor(TreeView activeTree, Color activeColor, Color nonActiveColor)
+        {
+            if (activeTree == LeftTreeView)
+            {
+                leftTreeLabel.BackColor = activeColor;
+                rightTreeLabel.BackColor = nonActiveColor;
+            }
+            else
+            {
+                leftTreeLabel.BackColor = nonActiveColor;
+                rightTreeLabel.BackColor = activeColor;
+            }
+        }
+
 
         //########################################################################################################################################
         //########################################################################################################################################
@@ -555,12 +581,12 @@ namespace PhotoTransfer
                 Directory.CreateDirectory(path);
             }
 
-            foreach (TreeNode node in selectedTreeView.SelectedNode.Nodes) // Find the node with saved name in parent branch
+            foreach (TreeNode node in selectedTreeView.SelectedNode.Nodes)
             {
-                if (node.Text == newFolderName) // If the found node name is equivalent to the saved node
+                if (node.Text == newFolderName)
                 {
-                    selectedTreeView.SelectedNode = node; // Select node only
-                    break; // Exit from loop
+                    selectedTreeView.SelectedNode = node;
+                    break;
                 }
             }
 
@@ -572,15 +598,15 @@ namespace PhotoTransfer
         private void RenameFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             selectedTreeView.LabelEdit = true;
-            selectedTreeView.SelectedNode.BeginEdit(); // Start rename node
+            selectedTreeView.SelectedNode.BeginEdit();
         }
 
         private void DeleteFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Directory.GetFileSystemEntries(selectedTreeView.SelectedNode.FullPath).Length == 0) // If selected folder is empty
+            if (Directory.GetFileSystemEntries(selectedTreeView.SelectedNode.FullPath).Length == 0)
             {
-                Directory.Delete(selectedTreeView.SelectedNode.FullPath); // Delete selected folder
-                selectedTreeView.SelectedNode.Remove(); // Delete selected node from selected TreeView
+                Directory.Delete(selectedTreeView.SelectedNode.FullPath);
+                selectedTreeView.SelectedNode.Remove();
             }
             else // If selected folder is NOT empty
             {
@@ -589,9 +615,8 @@ namespace PhotoTransfer
                 {
                     try
                     {
-                        // Delete selected folder with all files
                         Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(selectedTreeView.SelectedNode.FullPath, Microsoft.VisualBasic.FileIO.UIOption.AllDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
-                        selectedTreeView.SelectedNode.Remove(); // Delete selected node from selected TreeView
+                        selectedTreeView.SelectedNode.Remove();
                     }
                     catch
                     {
@@ -656,7 +681,7 @@ namespace PhotoTransfer
 
         private void buttonForCopy_MouseLeave(object sender, EventArgs e)
         {
-            bottomInfoPanel.BackColor = Color.FromArgb(5, 102, 141);
+            bottomInfoPanel.BackColor = Color.Black;
         }
 
         private void buttonForCopy_Click(object sender, EventArgs e)
@@ -672,7 +697,7 @@ namespace PhotoTransfer
 
         private void buttonForMove_MouseLeave(object sender, EventArgs e)
         {
-            bottomInfoPanel.BackColor = Color.FromArgb(5, 102, 141);
+            bottomInfoPanel.BackColor = Color.Black;
         }
 
         private void buttonForMove_Click(object sender, EventArgs e)
@@ -693,40 +718,40 @@ namespace PhotoTransfer
             sourceFolderPath = LeftTreeView.SelectedNode.FullPath; // For example: F/Nikon/0200D850
             destinationFolderPath = RightTreeView.SelectedNode.FullPath; // For example: E:/Archive
 
-            if (Path.GetFileName(destinationFolderPath) != "Archive") // Destination folder name is Archve?
+            if (Path.GetFileName(destinationFolderPath) != "Archive")
             {
                 MessageBox.Show("Archive folder NOT selected!", "Hmmm...", 0, MessageBoxIcon.Stop);
                 return;
             }
 
-            BlockControls(LeftTreeView); // Change backcolor for nodes in LeftTreeView 
-            BlockControls(RightTreeView); // Change backcolor for nodes in RightTreeView 
+            BlockControls(LeftTreeView);
+            BlockControls(RightTreeView);
 
             GeneralProgressTransfer.Visible = true;
             ProgressTransfer.Visible = true;
 
-            backgroundCopyMove.RunWorkerAsync(); // Start Async for backgroundCopyMove
+            backgroundCopyMove.RunWorkerAsync();
         }
 
         private void backgroundCopyMove_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            CheckCopyAllFiles(); // Go to check files function
+            CheckCopyAllFiles();
 
-            backgroundCopyMove.CancelAsync(); // Cancel Async for backgroundCopyMove
-            e.Cancel = true; // Stop DoWork
+            backgroundCopyMove.CancelAsync();
+            e.Cancel = true;
         }
 
         private void backgroundCopyMove_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
             ProgressTransfer.Value = e.ProgressPercentage; // Show progress for one file
 
-            if (e.ProgressPercentage == 100) // If transfer for file is end
+            if (e.ProgressPercentage == 100)
             {
                 GeneralProgressTransfer.Maximum = filesCount;
-                GeneralProgressTransfer.Value = ++transferedFilesCount; // Show general transfer progress
-                CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft, LeftTreeView); // Update left label with free space
-                CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight, RightTreeView); // Update right label with free space
-                FilesFinded(); // Update label with finded files
+                GeneralProgressTransfer.Value = ++transferedFilesCount;
+                CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft, LeftTreeView);
+                CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight, RightTreeView);
+                FilesFinded();
             }
         }
 
@@ -734,7 +759,7 @@ namespace PhotoTransfer
         {
             string msg = "";
 
-            if(isMove == false) // Pressed button for copy or for move?
+            if(isMove == false)
             {
                 msg = "Copied ";
             }
@@ -743,7 +768,7 @@ namespace PhotoTransfer
                 msg = "Moved ";
             }
 
-            MessageBox.Show("Done! " + msg + transferedFilesCount + " files!"); // Message after end all processes coping
+            MessageBox.Show("Done! " + msg + transferedFilesCount + " files!");
 
             if (copiesCount > 0)
             {
@@ -759,60 +784,57 @@ namespace PhotoTransfer
             GeneralProgressTransfer.Visible = false;
             ProgressTransfer.Visible = false;
 
-            GeneralProgressTransfer.Value = 0; // Reset value for GeneralProgressTransfer
-            ProgressTransfer.Value = 0; // Reset value for ProgressTransfer
-            transferedFilesCount = 0; // Reset value for transferedFilesCount
-            copiesCount = 0; // Reset value for copies
+            GeneralProgressTransfer.Value = 0;
+            ProgressTransfer.Value = 0;
+            transferedFilesCount = 0;
+            copiesCount = 0;
 
 
-            allDirectorys.ShowDirectorys(RightTreeView); // Update directorys for RightTreeView
-            CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight, RightTreeView); // Update right label with free space
+            allDirectorys.ShowDirectorys(RightTreeView); 
+            CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight, RightTreeView);
 
 
-            allDirectorys.ShowDirectorys(LeftTreeView); // Update directorys for LeftTreeView
-            CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft, LeftTreeView); // Update left label with free space
+            allDirectorys.ShowDirectorys(LeftTreeView);
+            CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft, LeftTreeView);
 
 
-            selectedTreeView.Focus(); // Focus on last selected treeView 
-            ShowContent(); // Update content in listView
-            FilesFinded(); // Update label with finded files
+            selectedTreeView.Focus();
+            ShowContent(selectedTreeView);
+            FilesFinded();
         }
 
         private void BlockControls(TreeView sourceTreeView) // Block controls and change nodes color
         {
-            sourceTreeView.Enabled = false; // Disable all treeView's
-            btnClose.Enabled = false; // Disable CLOSE button
-            buttonForCopy.Enabled = false; // Disable COPY TO button
-            buttonForMove.Enabled = false; // Disable MOVE TO button
+            sourceTreeView.Enabled = false;
+            btnClose.Enabled = false;
+            buttonForCopy.Enabled = false;
+            buttonForMove.Enabled = false;
 
-            foreach (TreeNode TN in sourceTreeView.Nodes) // Find root nodes in treeView's
+            foreach (TreeNode TN in sourceTreeView.Nodes)
             {
-                TN.BackColor = Color.FromArgb(100, 100, 100); // Change backcolor for node
-                ReColorNodes(TN); // Send finded root node to recursive function ReColorNodes()
+                TN.BackColor = Color.FromArgb(100, 100, 100);
+                ReColorNodes(TN);
             }
-            sourceTreeView.SelectedNode.BackColor = Color.FromArgb(120, 120, 120); // Change backcolor for selected node
+            sourceTreeView.SelectedNode.BackColor = Color.FromArgb(120, 120, 120);
         }
 
-        private void ReColorNodes(TreeNode OTN) // Recursive function for change node backcolor
+        private void ReColorNodes(TreeNode OTN)
         {
-            foreach (TreeNode TN in OTN.Nodes) // Find node in tree
+            foreach (TreeNode TN in OTN.Nodes)
             {
-                TN.BackColor = Color.FromArgb(100, 100, 100); // Change backcolor for finded node
-                ReColorNodes(TN); // Send finded node to recursive function ReColorNodes()
+                TN.BackColor = Color.FromArgb(100, 100, 100);
+                ReColorNodes(TN);
             }
         }
 
         private void CheckCopyAllFiles()
         {
-            // 2018 / 07 July / 24
-
-            Regex regexPattern = new Regex(extentions); // Regex pattern
-            FileInfo sourceFileInfo; // Variable for get file information (Modification date, tags, ...)
+            Regex regexPattern = new Regex(extentions);
+            FileInfo sourceFileInfo;
 
             foreach (string checkFile in Directory.GetFileSystemEntries(sourceFolderPath, "*", SearchOption.TopDirectoryOnly)) // Find all files in current folder
             {
                 sourceFileInfo = new FileInfo(checkFile); // Get all information about selected file
-                fileExtension = sourceFileInfo.Extension; // Get file extension (.jpg, .exe, ...)
 
                 if (regexPattern.IsMatch(checkFile) == true) // If file extension = extension from pattern
                 {
@@ -832,11 +854,11 @@ namespace PhotoTransfer
 
         private void CopyMoveFile(string pathTo, FileInfo checkedFileInfo)
         {
-            DateTime origrnalDataTime = checkedFileInfo.LastWriteTime; // Save original date of file
+            DateTime origrnalDataTime = checkedFileInfo.LastWriteTime;
 
-            int fileDay = checkedFileInfo.LastWriteTime.Day; // Get DAY of file modified
-            int fileMonth = checkedFileInfo.LastWriteTime.Month; // Get MONTH of file modified
-            int fileYear = checkedFileInfo.LastWriteTime.Year; // Get YEAR of file modified
+            int fileDay = checkedFileInfo.LastWriteTime.Day;
+            int fileMonth = checkedFileInfo.LastWriteTime.Month;
+            int fileYear = checkedFileInfo.LastWriteTime.Year;
 
             string day = fileDay.ToString();
 
@@ -845,32 +867,32 @@ namespace PhotoTransfer
                 day = "0" + fileDay.ToString();
             }
 
-            string[] monthName = {"", "01 January", "02 February", "03 March", "04 April", "05 May", "06 June", "07 July", "08 August", "09 September", "10 October", "11 November", "12 December"}; // Rename month number to number with name - 01 January, 02 February, 03 March ...
+            string[] monthName = {"", "01 January", "02 February", "03 March", "04 April", "05 May", "06 June", "07 July", "08 August", "09 September", "10 October", "11 November", "12 December"};
             string month = monthName[fileMonth];
 
-            string existsPath = pathTo + "//" + fileYear + "//" + month + "//" + day; // Variable for check path
+            string existsPath = pathTo + "//" + fileYear + "//" + month + "//" + day;
 
-            if (Directory.Exists(existsPath) == false) // Directory is EXISTS?
+            if (Directory.Exists(existsPath) == false)
             {
-                Directory.CreateDirectory(existsPath); // Create directories
+                Directory.CreateDirectory(existsPath);
             }
 
             isCopy = false; // Flag before checking EXISTS
 
-            if (File.Exists(existsPath + "//" + checkedFileInfo.Name))  // File is EXISTS?
+            if (File.Exists(existsPath + "//" + checkedFileInfo.Name))
             {
                 isCopy = true;
                 copiesCount++;
 
-                if (Directory.Exists(checkedFileInfo.DirectoryName + "//" + "_COPIES") == false) // Directory for COPIES is EXISTS?
+                if (Directory.Exists(checkedFileInfo.DirectoryName + "//" + "_COPIES") == false)
                 {
-                    Directory.CreateDirectory(checkedFileInfo.DirectoryName + "//" + "_COPIES"); // Create directories
+                    Directory.CreateDirectory(checkedFileInfo.DirectoryName + "//" + "_COPIES");
                 }
 
-                checkedFileInfo.MoveTo(checkedFileInfo.DirectoryName + "//" + "_COPIES" + "//" + checkedFileInfo.Name); // Move copy file to _COPIES folder in source directory
+                checkedFileInfo.MoveTo(checkedFileInfo.DirectoryName + "//" + "_COPIES" + "//" + checkedFileInfo.Name); // Move copies of file to _COPIES folder in source directory
                 
-                CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft, LeftTreeView); // Update left label with free space
-                CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight, RightTreeView); // Update right label with free space
+                CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft, LeftTreeView);
+                CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight, RightTreeView);
                 FilesFinded(); // Update label with finded files
                 return;
             }
@@ -889,9 +911,9 @@ namespace PhotoTransfer
 
             fileSource.Close();
             fileDestination.Close();
-            File.SetCreationTime(existsPath + "//" + checkedFileInfo.Name, origrnalDataTime); // Restore origrnal Create Date of file
-            File.SetLastWriteTime(existsPath + "//" + checkedFileInfo.Name, origrnalDataTime); // Restore origrnal Modified Date of file
+            File.SetCreationTime(existsPath + "//" + checkedFileInfo.Name, origrnalDataTime);
+            File.SetLastWriteTime(existsPath + "//" + checkedFileInfo.Name, origrnalDataTime);
         }
-
+       
     }
 }

@@ -5,16 +5,16 @@ namespace PhotoTransfer
 {
     class LoadAllDrives
     {
-        public void GetAllDrives(TreeView sourceTreeView) // Function for clear tree and add drives with icons again
+        public void GetAllDrives(TreeView sourceTreeView)
         {
-            int drivesCount = 0; // Variable for set drive number in tree
-            sourceTreeView.Nodes.Clear(); // Clear sourse tree
-            foreach (DriveInfo driveInfo in DriveInfo.GetDrives()) // Get drives
+            int drivesCount = 0;
+            sourceTreeView.Nodes.Clear();
+            foreach (DriveInfo driveInfo in DriveInfo.GetDrives())
             {
 
                 if (driveInfo.DriveType == DriveType.CDRom && driveInfo.IsReady) // If it is CD-Rom and it is ready
                 {
-                    drivesCount = TreeIcons(sourceTreeView, driveInfo, drivesCount, 2); // drivesCount get number from TreeIcons() and index icon 2 from iconsList
+                    drivesCount = TreeIcons(sourceTreeView, driveInfo, drivesCount, 2); // drivesCount get number from TreeIcons() and get icon index from iconsList
                 }
                 else if (driveInfo.DriveType == DriveType.Fixed && driveInfo.Name == @"C:\") // If it is HDD and it is drive C:\
                 {
@@ -31,12 +31,12 @@ namespace PhotoTransfer
             }
         }
 
-        private int TreeIcons(TreeView oldTreeView, DriveInfo driveInfo, int driveNumber, int iconNumber) // Add drive in tree and add icon
+        private int TreeIcons(TreeView sourceTreeView, DriveInfo driveInfo, int driveNumber, int iconNumber) // Add drive in tree and add icon
         {
-            oldTreeView.Nodes.Add(driveInfo.Name); // Add drive in tree
-            oldTreeView.Nodes[driveNumber].ImageIndex = iconNumber; // Set selected icon for selected drive as default
-            oldTreeView.Nodes[driveNumber].SelectedImageIndex = iconNumber; // Set icon for drive if drive was mouse selected
-            return ++driveNumber; // Return new number for next drive
+            sourceTreeView.Nodes.Add(driveInfo.Name); // Add a drive in tree
+            sourceTreeView.Nodes[driveNumber].ImageIndex = iconNumber; // Set an icon for the drive as default
+            sourceTreeView.Nodes[driveNumber].SelectedImageIndex = iconNumber; // Set an icon for the drive if drive was selected with the mouse
+            return ++driveNumber;
         }
 
     }

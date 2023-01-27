@@ -8,42 +8,42 @@ namespace PhotoTransfer
 {
     class LoadDirectorys
     {
-        bool existNode = false; // Variable for exist directorys
-        string selectedNode = null; // Variable for save the last selected node in branch
+        bool existNode = false;
+        string selectedNode = null;
 
-        LoadAllDrives allDrives = new LoadAllDrives(); // Create new class
-        DirectoryInfo info; // Variable for directory attributes
+        LoadAllDrives allDrives = new LoadAllDrives();
+        DirectoryInfo info;
 
-        public void ShowDirectorys(TreeView SelectedTreeView) // Get all directorys in selected node
+        public void ShowDirectorys(TreeView SelectedTreeView)
         {
-            foreach (string directoryInfo in Directory.GetDirectories(SelectedTreeView.SelectedNode.FullPath, "*", SearchOption.TopDirectoryOnly)) // Get all directorys in selected node
+            foreach (string directoryInfo in Directory.GetDirectories(SelectedTreeView.SelectedNode.FullPath, "*", SearchOption.TopDirectoryOnly))
             {
-                info = new DirectoryInfo(directoryInfo); // Get properties of directory
+                info = new DirectoryInfo(directoryInfo);
 
-                if ((info.Attributes & FileAttributes.System) == FileAttributes.System | (info.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden) // If directory is System or Hidden
+                if ((info.Attributes & FileAttributes.System) == FileAttributes.System | (info.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden)
                 {
-                    continue; // Stop this loop and go to the next foreach loop
+                    continue;
                 }
 
-                ExistNode(SelectedTreeView, Path.GetFileName(directoryInfo)); // Check exist directory name in selected node
+                ExistNode(SelectedTreeView, Path.GetFileName(directoryInfo));
 
-                if (existNode == false) // If directory not exists
+                if (existNode == false)
                 {
-                    SelectedTreeView.SelectedNode.Nodes.Add(Path.GetFileName(directoryInfo)); // Add node as directory name
+                    SelectedTreeView.SelectedNode.Nodes.Add(Path.GetFileName(directoryInfo));
                 }
             }
         }
 
-        private bool ExistNode(TreeView ExistTreeView, string existDirectory) // Exist directory name in selected node
+        private bool ExistNode(TreeView ExistTreeView, string existDirectory)
         {
-            foreach (TreeNode node in ExistTreeView.SelectedNode.Nodes) // Get node name from selected node in TreeView
+            foreach (TreeNode node in ExistTreeView.SelectedNode.Nodes)
             {
-                if (node.Text == existDirectory) // If directory name from selected node in TreeView exists
+                if (node.Text == existDirectory)
                 {
-                    return existNode = true; // Return "Have this name"
+                    return existNode = true;
                 }
             }
-            return existNode = false; // Return "Don't have this name" if directory name not exists
+            return existNode = false;
         }
 
 
@@ -53,17 +53,17 @@ namespace PhotoTransfer
 //########################################################################################################################################
 
 
-        public void RefreshDirectorys(Control mainForm) // Refresh directirys in parent node
+        public void RefreshDirectorys(Control mainForm)
         {
-            var AllTreeView = GetControl(mainForm, typeof(TreeView)); // Get all TreeView's from main form
+            var AllTreeView = GetControl(mainForm, typeof(TreeView));
 
-            foreach (TreeView Tree in AllTreeView) // Get TreeView control from variable AllControls
+            foreach (TreeView Tree in AllTreeView)
             {
                 Reftreebranch(Tree);
             }
         }
 
-        private IEnumerable<Control> GetControl(Control control, Type type) // Find all controls with TreeView type in main control ( mainForm )
+        private IEnumerable<Control> GetControl(Control control, Type type)
         {
             var controls = control.Controls.Cast<Control>();
             return controls.SelectMany(ctrl => GetControl(ctrl, type)).Concat(controls).Where(c => c.GetType() == type);
@@ -71,27 +71,27 @@ namespace PhotoTransfer
 
         private void Reftreebranch(TreeView SelectedTreeView)
         {
-            selectedNode = SelectedTreeView.SelectedNode.Text; // Seve name from the last selected node in branch
+            selectedNode = SelectedTreeView.SelectedNode.Text;
 
-            if (SelectedTreeView.SelectedNode.Parent != null) // If the last selected node have parent node
+            if (SelectedTreeView.SelectedNode.Parent != null)
             {
-                SelectedTreeView.SelectedNode.Parent.Nodes.Clear(); // Clear all nodes in parent
+                SelectedTreeView.SelectedNode.Parent.Nodes.Clear();
             }
-            else  // If the last selected node NOT have parent node
+            else
             {
-                SelectedTreeView.Nodes.Clear(); // Clear selected TreeView
-                allDrives.GetAllDrives(SelectedTreeView); // Get all drives
-                SelectedTreeView.SelectedNode = SelectedTreeView.TopNode; // Select top node in selected TreeView
+                SelectedTreeView.Nodes.Clear();
+                allDrives.GetAllDrives(SelectedTreeView);
+                SelectedTreeView.SelectedNode = SelectedTreeView.TopNode;
             }
 
-            ShowDirectorys(SelectedTreeView); // Get all directorys in selected branch
+            ShowDirectorys(SelectedTreeView);
 
-            foreach (TreeNode node in SelectedTreeView.SelectedNode.Nodes) // Find the node with saved name in new branch
+            foreach (TreeNode node in SelectedTreeView.SelectedNode.Nodes)
             {
-                if (node.Text == selectedNode) // If the found node name is equivalent to the saved name
+                if (node.Text == selectedNode)
                 {
-                    SelectedTreeView.SelectedNode = node; // Select node only
-                    break; // Exit from loop
+                    SelectedTreeView.SelectedNode = node;
+                    break;
                 }
             }
         }

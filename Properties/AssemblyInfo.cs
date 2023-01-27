@@ -7,11 +7,11 @@ using System.Runtime.InteropServices;
 // набора атрибутов. Измените значения этих атрибутов для изменения сведений,
 // связанных со сборкой.
 [assembly: AssemblyTitle("PhotoTransfer")]
-[assembly: AssemblyDescription("This app for cameras owners")]
+[assembly: AssemblyDescription("This app for the cameras owners")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("PhotoTransfer")]
-[assembly: AssemblyCopyright("Mr.Nikolson / Copyright © 2022")]
+[assembly: AssemblyCopyright("Aleksey Nikolaev / Copyright © 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -33,6 +33,6 @@ using System.Runtime.InteropServices;
 // Можно задать все значения или принять номера сборки и редакции по умолчанию 
 // используя "*", как показано ниже:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.1.3")]
-[assembly: AssemblyFileVersion("1.1.1.3")]
+[assembly: AssemblyVersion("1.1.1.6")]
+[assembly: AssemblyFileVersion("1.1.1.6")]
 [assembly: NeutralResourcesLanguage("en-US")]
