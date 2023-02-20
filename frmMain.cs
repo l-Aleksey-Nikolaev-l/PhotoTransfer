@@ -21,11 +21,12 @@ namespace PhotoTransfer
         private bool diskSpaceLeft = false;
         private bool diskSpaceRight = false;
         private bool isMove = false;
-        private bool isCopy = false;
 
         string sourceFolderPath = ""; // For example: F/Nikon/0200D850
         string destinationFolderPath = ""; // For example: E:/Archive
         string extentions = @".dng|.DNG|.fff|.FFF|.jpg|.JPG|.JPEG|.jpeg|.nef|.NEF|.png|.PNG|.raw|.RAW|.tif|.tiff|.TIF|.TIFF|.mp4|.mov|.wma|.avi|.MP4|.MOV|.WMA|.AVI";
+
+        FileInfo sourceFileInfo;
 
         TreeView selectedTreeView;
         TreeView prevSelectedTreeView;
@@ -516,8 +517,8 @@ namespace PhotoTransfer
                 return;
             }
 
-            Color activeColor = new Color();
-            Color nonActiveColor = new Color();
+            Color activeColor;
+            Color nonActiveColor;
 
             activeColor = Color.FromArgb(0, 120, 215);
             nonActiveColor = Color.FromArgb(120, 120, 120);
@@ -686,7 +687,6 @@ namespace PhotoTransfer
 
         private void buttonForCopy_Click(object sender, EventArgs e)
         {
-            isMove = false;
             Pre_DoWork();
         }
 
@@ -735,7 +735,7 @@ namespace PhotoTransfer
 
         private void backgroundCopyMove_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            CheckCopyAllFiles();
+            GetAndTransferAllFiles();
 
             backgroundCopyMove.CancelAsync();
             e.Cancel = true;
@@ -743,7 +743,7 @@ namespace PhotoTransfer
 
         private void backgroundCopyMove_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
-            ProgressTransfer.Value = e.ProgressPercentage; // Show progress for one file
+            ProgressTransfer.Value = e.ProgressPercentage; // Show progress for a one file
 
             if (e.ProgressPercentage == 100)
             {
@@ -757,7 +757,7 @@ namespace PhotoTransfer
 
         private void backgroundCopyMove_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            string msg = "";
+            string msg;
 
             if(isMove == false)
             {
@@ -766,6 +766,7 @@ namespace PhotoTransfer
             else
             {
                 msg = "Moved ";
+                isMove = false;
             }
 
             MessageBox.Show("Done! " + msg + transferedFilesCount + " files!");
@@ -775,11 +776,8 @@ namespace PhotoTransfer
                 MessageBox.Show("Attantion!" + "\n" + "In SOURSE folder - " + copiesCount + " file(s) is COPIES." + "\n" + "Check them!", "NOT transfered " + copiesCount + " files", 0, MessageBoxIcon.Exclamation);
             }
 
-            btnClose.Enabled = true;
-            buttonForCopy.Enabled = true;
-            buttonForMove.Enabled = true;
-            LeftTreeView.Enabled = true;
-            RightTreeView.Enabled = true;
+            UnBlockControls(LeftTreeView);
+            UnBlockControls(RightTreeView);
 
             GeneralProgressTransfer.Visible = false;
             ProgressTransfer.Visible = false;
@@ -809,111 +807,149 @@ namespace PhotoTransfer
             btnClose.Enabled = false;
             buttonForCopy.Enabled = false;
             buttonForMove.Enabled = false;
+            Color newColor = Color.FromArgb(100, 100, 100);
 
-            foreach (TreeNode TN in sourceTreeView.Nodes)
+            foreach (TreeNode sourceTreeNodes in sourceTreeView.Nodes)
             {
-                TN.BackColor = Color.FromArgb(100, 100, 100);
-                ReColorNodes(TN);
+                sourceTreeNodes.BackColor = newColor;
+                ReColorNodes(sourceTreeNodes, newColor);
             }
             sourceTreeView.SelectedNode.BackColor = Color.FromArgb(120, 120, 120);
         }
 
-        private void ReColorNodes(TreeNode OTN)
+        private void UnBlockControls(TreeView sourceTreeView) // UnBlock controls and change nodes color
         {
-            foreach (TreeNode TN in OTN.Nodes)
+            sourceTreeView.Enabled = true;
+            btnClose.Enabled = true;
+            buttonForCopy.Enabled = true;
+            buttonForMove.Enabled = true;
+            Color newColor = Color.FromArgb(64, 64, 64);
+
+            foreach (TreeNode sourceTreeNodes in sourceTreeView.Nodes)
             {
-                TN.BackColor = Color.FromArgb(100, 100, 100);
-                ReColorNodes(TN);
+                sourceTreeNodes.BackColor = newColor;
+                ReColorNodes(sourceTreeNodes, newColor);
+            }
+            sourceTreeView.SelectedNode.BackColor = Color.FromArgb(0, 120, 215);
+        }
+
+        private void ReColorNodes(TreeNode sourceTreeNodes, Color newColor)
+        {
+            foreach (TreeNode foundedTreeNode in sourceTreeNodes.Nodes)
+            {
+                foundedTreeNode.BackColor = newColor;
+                ReColorNodes(foundedTreeNode, newColor);
             }
         }
 
-        private void CheckCopyAllFiles()
+        private void GetAndTransferAllFiles()
         {
-            Regex regexPattern = new Regex(extentions);
-            FileInfo sourceFileInfo;
-
-            foreach (string checkFile in Directory.GetFileSystemEntries(sourceFolderPath, "*", SearchOption.TopDirectoryOnly)) // Find all files in current folder
+            Regex extentionsPattern = new Regex(extentions);
+            
+            foreach (string getFile in Directory.GetFileSystemEntries(sourceFolderPath, "*", SearchOption.TopDirectoryOnly))
             {
-                sourceFileInfo = new FileInfo(checkFile); // Get all information about selected file
+                sourceFileInfo = new FileInfo(getFile);
 
-                if (regexPattern.IsMatch(checkFile) == true) // If file extension = extension from pattern
+                if (extentionsPattern.IsMatch(getFile) == false)
                 {
-                    CopyMoveFile(destinationFolderPath, sourceFileInfo); // Go to CopyMoveFile function with destination folder path and information about selected file
-                }
-                else // If file extension != extension from pattern
-                {
-                    continue; // Select next file
+                    continue;
                 }
 
-                if (isMove == true & isCopy == false) // If pressed MOVE TO button
+                PreparationForTransferring(destinationFolderPath, sourceFileInfo);
+
+                if (isMove == true) // If pressed MOVE TO button
                 {
-                    File.Delete(sourceFileInfo.FullName); // Delete file from source directory
+                    File.Delete(sourceFileInfo.FullName);
                 }
             }
         }
 
-        private void CopyMoveFile(string pathTo, FileInfo checkedFileInfo)
+        private void PreparationForTransferring(string destinationFolderPath, FileInfo sourceFileInfo)
         {
-            DateTime origrnalDataTime = checkedFileInfo.LastWriteTime;
+            string newDestinationFolderPath = CreateNewPath(destinationFolderPath, sourceFileInfo);
+            CheckExistenceOfDirectory(newDestinationFolderPath);
+            newDestinationFolderPath = CheckExistenceOfFile(newDestinationFolderPath, sourceFileInfo);
+            TransferFile(newDestinationFolderPath, sourceFileInfo);
+            RestoreShootingDate(newDestinationFolderPath, sourceFileInfo);
+        }
 
-            int fileDay = checkedFileInfo.LastWriteTime.Day;
-            int fileMonth = checkedFileInfo.LastWriteTime.Month;
-            int fileYear = checkedFileInfo.LastWriteTime.Year;
+        private string CreateNewPath(string newDestinationFolderPath, FileInfo sourceFileInfo)
+        {
+            int fileDay = sourceFileInfo.LastWriteTime.Day;
+            int fileMonth = sourceFileInfo.LastWriteTime.Month;
+            int fileYear = sourceFileInfo.LastWriteTime.Year;
 
             string day = fileDay.ToString();
+            string[] monthName = {"01 January", "02 February", "03 March", "04 April", "05 May", "06 June", "07 July", "08 August", "09 September", "10 October", "11 November", "12 December" };
+            string month = monthName[fileMonth - 1];
 
             if (fileDay < 10)
             {
                 day = "0" + fileDay.ToString();
             }
 
-            string[] monthName = {"", "01 January", "02 February", "03 March", "04 April", "05 May", "06 June", "07 July", "08 August", "09 September", "10 October", "11 November", "12 December"};
-            string month = monthName[fileMonth];
-
-            string existsPath = pathTo + "//" + fileYear + "//" + month + "//" + day;
-
-            if (Directory.Exists(existsPath) == false)
-            {
-                Directory.CreateDirectory(existsPath);
-            }
-
-            isCopy = false; // Flag before checking EXISTS
-
-            if (File.Exists(existsPath + "//" + checkedFileInfo.Name))
-            {
-                isCopy = true;
-                copiesCount++;
-
-                if (Directory.Exists(checkedFileInfo.DirectoryName + "//" + "_COPIES") == false)
-                {
-                    Directory.CreateDirectory(checkedFileInfo.DirectoryName + "//" + "_COPIES");
-                }
-
-                checkedFileInfo.MoveTo(checkedFileInfo.DirectoryName + "//" + "_COPIES" + "//" + checkedFileInfo.Name); // Move copies of file to _COPIES folder in source directory
-                
-                CalculateFreeSpace(LeftFreeSpaceLabel, diskSpaceLeft, LeftTreeView);
-                CalculateFreeSpace(RightFreeSpaceLabel, diskSpaceRight, RightTreeView);
-                FilesFinded(); // Update label with finded files
-                return;
-            }
-
-            FileStream fileSource = new FileStream(checkedFileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
-            FileStream fileDestination = new FileStream(existsPath + "//" + checkedFileInfo.Name, FileMode.Create);
-
-            byte[] bt = new byte[16384]; // 1Mb = 1048576 Bytes in Binary (not in decimal SI) / 512KB = 524288 Bytes / 4096 Bytes - is recomendation
-            int readByte;
-
-            while ((readByte = fileSource.Read(bt, 0, bt.Length)) > 0)
-            {
-                fileDestination.Write(bt, 0, readByte);
-                backgroundCopyMove.ReportProgress((int)(fileSource.Position * 100 / fileSource.Length));
-            }
-
-            fileSource.Close();
-            fileDestination.Close();
-            File.SetCreationTime(existsPath + "//" + checkedFileInfo.Name, origrnalDataTime);
-            File.SetLastWriteTime(existsPath + "//" + checkedFileInfo.Name, origrnalDataTime);
+            return newDestinationFolderPath + "//" + fileYear + "//" + month + "//" + day;
         }
        
+        private void CheckExistenceOfDirectory(string newDestinationFolderPath)
+        {
+            if (Directory.Exists(newDestinationFolderPath) == false)
+            {
+                Directory.CreateDirectory(newDestinationFolderPath);
+            }
+        }
+
+        private string CheckExistenceOfFile(string newDestinationFolderPath, FileInfo sourceFileInfo)
+        {
+            if (File.Exists(newDestinationFolderPath + "//" + sourceFileInfo.Name))
+            {
+                if (Directory.Exists(newDestinationFolderPath + "//" + "_COPIES") == false)
+                {
+                    Directory.CreateDirectory(newDestinationFolderPath + "//" + "_COPIES");
+                }
+            }
+            return newDestinationFolderPath += "//" + "_COPIES";
+        }
+
+        private void TransferFile(string newDestinationFolderPath, FileInfo sourceFileInfo)
+        {
+            FileStream sourceFile = new FileStream(sourceFileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
+            FileStream destinationFile = new FileStream(newDestinationFolderPath + "//" + sourceFileInfo.Name, FileMode.Create);
+            FileStream destinationFileData = new FileStream(sourceFileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+            byte[] originalFileData = new byte[4096]; // 1Mb = 1048576 Bytes in Binary (not in decimal SI) / 512KB = 524288 Bytes / 4096 Bytes - is recomendation
+            byte[] newFileData = new byte[4096];
+
+            int readByte;
+
+            while ((readByte = sourceFile.Read(originalFileData, 0, originalFileData.Length)) > 0)
+            {
+                destinationFile.Write(originalFileData, 0, readByte);
+                CheckDataOfNewFile(originalFileData, newFileData, destinationFileData);
+                backgroundCopyMove.ReportProgress((int)(sourceFile.Position * 100 / sourceFile.Length));
+            }
+
+            sourceFile.Close();
+            destinationFile.Close();
+            destinationFileData.Close();
+        }
+
+        private void CheckDataOfNewFile(byte[] originalFileData, byte[] newFileData, FileStream destinationFileData)
+        {
+            bool compareFilesData;
+            do
+            {
+                destinationFileData.Read(newFileData, 0, 4096);
+                compareFilesData = originalFileData.SequenceEqual(newFileData);
+            }
+            while (compareFilesData == false);
+        }
+
+        private void RestoreShootingDate(string newDestinationFolderPath, FileInfo sourceFileInfo)
+        {
+            DateTime origrnalDataTime = sourceFileInfo.LastWriteTime;
+            File.SetCreationTime(newDestinationFolderPath + "//" + sourceFileInfo.Name, origrnalDataTime);
+            File.SetLastWriteTime(newDestinationFolderPath + "//" + sourceFileInfo.Name, origrnalDataTime);
+        }
     }
 }
