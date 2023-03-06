@@ -906,9 +906,11 @@ namespace PhotoTransfer
                 if (Directory.Exists(newDestinationFolderPath + "//" + "_COPIES") == false)
                 {
                     Directory.CreateDirectory(newDestinationFolderPath + "//" + "_COPIES");
+                    return newDestinationFolderPath += "//" + "_COPIES";
                 }
+                return newDestinationFolderPath += "//" + "_COPIES";
             }
-            return newDestinationFolderPath += "//" + "_COPIES";
+            return newDestinationFolderPath;
         }
 
         private void TransferFile(string newDestinationFolderPath, FileInfo sourceFileInfo)
